@@ -1,33 +1,51 @@
-import type { Metadata } from "next";
-import { Space_Grotesk, Inter, JetBrains_Mono } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Syne, Plus_Jakarta_Sans, IBM_Plex_Mono, Newsreader } from "next/font/google";
 import "@/styles/globals.css";
 import { SmoothScroll } from "@/components/layout/SmoothScroll";
 import { CustomCursor } from "@/components/ui/CustomCursor";
-import { Preloader } from "@/components/layout/Preloader";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { WhatsAppButton } from "@/components/ui/WhatsAppButton";
 
-const spaceGrotesk = Space_Grotesk({
+const syne = Syne({
   subsets: ["latin"],
-  variable: "--font-space-grotesk",
+  variable: "--font-syne",
   display: "swap",
+  weight: ["500", "600", "700", "800"],
 });
 
-const inter = Inter({
+const plusJakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-plus-jakarta",
   display: "swap",
+  weight: ["400", "500", "600", "700"],
 });
 
-const jetbrainsMono = JetBrains_Mono({
+const ibmPlexMono = IBM_Plex_Mono({
   subsets: ["latin"],
-  variable: "--font-jetbrains-mono",
+  variable: "--font-ibm-plex-mono",
   display: "swap",
+  weight: ["400", "500", "600"],
 });
+
+const newsreader = Newsreader({
+  subsets: ["latin"],
+  variable: "--font-newsreader",
+  display: "swap",
+  weight: ["400", "500", "600", "700"],
+  style: ["normal", "italic"],
+});
+
+export const viewport: Viewport = {
+  themeColor: "#030303",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+};
 
 export const metadata: Metadata = {
-  title: "Intelecta — Arsitektur Kecerdasan & Solusi IT Enterprise",
+  metadataBase: new URL("https://intelecta.id"),
+  title: "Intelecta: Arsitektur Kecerdasan & Solusi IT Enterprise",
   description:
     "Konsultan dan penyedia solusi teknologi informasi kelas dunia di Indonesia. Spesialisasi dalam AI Engineering, Cloud Infrastructure berkeandalan 99.99%, dan Cybersecurity Zero Trust.",
   keywords: [
@@ -37,16 +55,32 @@ export const metadata: Metadata = {
     "Cloud Infrastructure",
     "Kubernetes Specialist",
     "Cybersecurity Zero Trust",
-    "Next.js Enterprise Developer",
+    "Enterprise Solutions",
   ],
   authors: [{ name: "Intelecta Teknologi Nusantara" }],
+  creator: "Intelecta Teknologi Nusantara",
+  publisher: "Intelecta Teknologi Nusantara",
+  alternates: {
+    canonical: "https://intelecta.id",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
   icons: {
     icon: "/images/logo-icon.svg",
     shortcut: "/images/logo-icon.svg",
     apple: "/images/logo-icon.svg",
   },
   openGraph: {
-    title: "Intelecta — Arsitektur Kecerdasan & Solusi IT Enterprise",
+    title: "Intelecta: Arsitektur Kecerdasan & Solusi IT Enterprise",
     description:
       "Platform showcase solusi teknologi informasi mutakhir: AI, Cloud High-Availability, & Cybersecurity Zero Trust.",
     url: "https://intelecta.id",
@@ -64,11 +98,11 @@ export default function RootLayout({
   return (
     <html
       lang="id"
-      className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable}`}
+      dir="ltr"
+      className={`${syne.variable} ${plusJakarta.variable} ${ibmPlexMono.variable} ${newsreader.variable}`}
     >
-      <body className="bg-[#030303] text-white antialiased selection:bg-white selection:text-black">
+      <body className="bg-[#030303] text-white font-sans antialiased selection:bg-white selection:text-black">
         <SmoothScroll>
-          <Preloader />
           <CustomCursor />
           <Navbar />
           {children}

@@ -30,18 +30,32 @@ const config: Config = {
         brand: {
           silver: "#E4E4E7",
           glow: "rgba(255, 255, 255, 0.12)",
+          accent: "#E5A93C",
+          warm: "#E06334",
         },
       },
       fontFamily: {
-        sans: ["var(--font-inter)", "sans-serif"],
-        display: ["var(--font-space-grotesk)", "sans-serif"],
-        mono: ["var(--font-jetbrains-mono)", "monospace"],
+        sans: ["var(--font-plus-jakarta)", "sans-serif"],
+        display: ["var(--font-syne)", "sans-serif"],
+        serif: ["var(--font-newsreader)", "serif"],
+        mono: ["var(--font-ibm-plex-mono)", "monospace"],
+      },
+      borderRadius: {
+        none: "0px",
+        sm: "3px",
+        DEFAULT: "6px",
+        md: "8px",
+        lg: "12px",
+        xl: "16px",
+        "2xl": "20px",
+        full: "9999px",
       },
       animation: {
-        "spin-slow": "spin 20s linear infinite",
+        "spin-slow": "spin 24s linear infinite",
         "pulse-slow": "pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite",
         "beam-up": "beamUp 3s ease-in-out infinite alternate",
-        "marquee": "marquee 25s linear infinite",
+        "marquee": "marquee 28s linear infinite",
+        "shimmer": "shimmer 2s infinite",
       },
       keyframes: {
         beamUp: {
@@ -51,6 +65,9 @@ const config: Config = {
         marquee: {
           "0%": { transform: "translateX(0%)" },
           "100%": { transform: "translateX(-50%)" },
+        },
+        shimmer: {
+          "100%": { transform: "translateX(100%)" },
         },
       },
     },
