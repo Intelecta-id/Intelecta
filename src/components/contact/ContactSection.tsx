@@ -2,17 +2,21 @@
 
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import confetti from "canvas-confetti";
-import { Send, CheckCircle2, Sparkles, Mail, MapPin, Phone } from "lucide-react";
+import {
+  GlyphSend,
+  GlyphCheck,
+  GlyphMail,
+  GlyphLocation,
+  GlyphPhone,
+} from "@/components/ui/TechnicalGlyphs";
 import { MagneticButton } from "@/components/ui/MagneticButton";
-import { TerminalConsole } from "./TerminalConsole";
 
 export const ContactSection: React.FC = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     company: "",
-    service: "AI & Machine Learning",
+    service: "Web Development",
     message: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -22,69 +26,54 @@ export const ContactSection: React.FC = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate sending form
     setTimeout(() => {
       setIsSubmitting(false);
       setIsSubmitted(true);
-
-      // Trigger Confetti Effect
-      confetti({
-        particleCount: 80,
-        spread: 70,
-        origin: { y: 0.6 },
-        colors: ["#FFFFFF", "#E4E4E7", "#A1A1AA", "#71717A"],
-      });
-    }, 1000);
+    }, 800);
   };
 
   return (
-    <section id="kontak" className="relative py-28 bg-[#030303]">
-      {/* Decorative Anchor for terminal */}
-      <div id="terminal" className="absolute -top-10" />
-
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto">
-          <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 backdrop-blur-md">
-            <Sparkles className="h-3.5 w-3.5 text-zinc-300" />
-            <span className="font-mono text-xs uppercase tracking-wider text-zinc-400">
-              KONSULTASI & INISIASI
-            </span>
-          </div>
-
-          <h2 className="mt-6 font-display text-3xl font-extrabold text-white sm:text-4xl lg:text-5xl">
+    <section id="kontak" className="relative py-24 sm:py-32 bg-[#030303] border-t border-white/10">
+      <div className="mx-auto max-w-7xl px-6 sm:px-10 lg:px-12">
+        {/* Editorial Section Header */}
+        <div className="max-w-3xl border-b border-white/10 pb-8">
+          <span className="font-sans text-xs tracking-widest text-zinc-400 uppercase">
+            Inisiasi Kerjasama
+          </span>
+          <h2 className="mt-3 font-serif text-3xl sm:text-4xl lg:text-5xl text-white font-normal leading-tight">
             Mari Rancang Masa Depan Bersama
           </h2>
-
-          <p className="mt-4 text-base text-zinc-400">
-            Diskusikan kebutuhan arsitektur digital, inisiatif AI enterprise, atau audit keamanan siber Anda
-            bersama dewan pakar Intelecta.
+          <p className="mt-4 font-sans text-base text-zinc-400 leading-relaxed max-w-2xl">
+            Diskusikan kebutuhan arsitektur sistem, skalabilitas beban, dan produk digital Anda bersama tim rekayasa Intelecta.
           </p>
         </div>
 
-        {/* 2-Column Layout: Form & Terminal */}
-        <div className="mt-16 grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-12 items-start">
+        {/* 2-Column Editorial Layout */}
+        <div className="mt-12 grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-14 items-start">
+          
           {/* Left Column: Contact Form */}
-          <div className="rounded-3xl border border-white/15 bg-[#0D0D11]/90 p-8 sm:p-10 backdrop-blur-xl lg:col-span-6">
-            <h3 className="font-display text-2xl font-bold text-white">
-              Kirim Pesan Langsung
+          <div className="rounded-2xl border border-white/10 bg-[#08080C]/80 p-8 sm:p-10 backdrop-blur-xl lg:col-span-6">
+            <h3 className="font-serif text-2xl text-white font-normal">
+              Kirim Permintaan Konsultasi
             </h3>
-            <p className="mt-1 text-xs text-zinc-400">
+            <p className="mt-1 font-sans text-xs text-zinc-400">
               Tim engineering kami akan merespons dalam kurun waktu 1x24 jam kerja.
             </p>
 
             {isSubmitted ? (
               <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
+                initial={{ opacity: 0, scale: 0.96 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="mt-8 rounded-2xl border border-emerald-500/20 bg-emerald-500/10 p-8 text-center"
+                className="mt-8 rounded-xl border border-white/15 bg-white/[0.02] p-8 text-center"
               >
-                <CheckCircle2 className="mx-auto h-12 w-12 text-emerald-400" />
-                <h4 className="mt-4 font-display text-xl font-bold text-white">
-                  Pesan Berhasil Terkirim!
+                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white">
+                  <GlyphCheck className="h-5 w-5" />
+                </div>
+                <h4 className="mt-4 font-serif text-2xl text-white font-normal">
+                  Permintaan Berhasil Terkirim
                 </h4>
-                <p className="mt-2 text-sm text-zinc-300">
-                  Terima kasih, {formData.name}. Konsultan Intelecta akan segera menghubungi Anda melalui email {formData.email}.
+                <p className="mt-2 font-sans text-sm text-zinc-300">
+                  Terima kasih, {formData.name}. Solutions Architect Intelecta akan segera menghubungi Anda melalui email <span className="text-white underline">{formData.email}</span>.
                 </p>
                 <button
                   onClick={() => {
@@ -93,90 +82,94 @@ export const ContactSection: React.FC = () => {
                       name: "",
                       email: "",
                       company: "",
-                      service: "AI & Machine Learning",
+                      service: "Web Development",
                       message: "",
                     });
                   }}
-                  className="mt-6 text-xs text-zinc-400 underline hover:text-white"
+                  className="mt-6 font-sans text-xs text-zinc-400 underline hover:text-white"
                 >
-                  Kirim pesan baru
+                  Kirim permohonan baru
                 </button>
               </motion.div>
             ) : (
-              <form onSubmit={handleSubmit} className="mt-8 space-y-6">
-                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+              <form onSubmit={handleSubmit} className="mt-8 space-y-5">
+                <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
                   <div>
-                    <label className="block font-mono text-xs text-zinc-400">
-                      NAMA LENGKAP *
+                    <label htmlFor="contact-name" className="block font-sans text-xs text-zinc-400">
+                      Nama Lengkap *
                     </label>
                     <input
+                      id="contact-name"
                       type="text"
                       required
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                       placeholder="Budi Santoso"
-                      className="mt-2 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-zinc-600 transition-colors focus:border-white/40 focus:bg-white/10 focus:outline-none"
+                      className="mt-2 w-full rounded-lg border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-white placeholder-zinc-600 transition-colors focus:border-white focus:bg-white/5 focus:outline-none"
                     />
                   </div>
 
                   <div>
-                    <label className="block font-mono text-xs text-zinc-400">
-                      EMAIL BISNIS *
+                    <label htmlFor="contact-email" className="block font-sans text-xs text-zinc-400">
+                      Email Bisnis *
                     </label>
                     <input
+                      id="contact-email"
                       type="email"
                       required
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       placeholder="budi@perusahaan.co.id"
-                      className="mt-2 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-zinc-600 transition-colors focus:border-white/40 focus:bg-white/10 focus:outline-none"
+                      className="mt-2 w-full rounded-lg border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-white placeholder-zinc-600 transition-colors focus:border-white focus:bg-white/5 focus:outline-none"
                     />
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
                   <div>
-                    <label className="block font-mono text-xs text-zinc-400">
-                      PERUSAHAAN / ORGANISASI
+                    <label htmlFor="contact-company" className="block font-sans text-xs text-zinc-400">
+                      Perusahaan / Organisasi
                     </label>
                     <input
+                      id="contact-company"
                       type="text"
                       value={formData.company}
                       onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                      placeholder="PT Maju Digital"
-                      className="mt-2 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-zinc-600 transition-colors focus:border-white/40 focus:bg-white/10 focus:outline-none"
+                      placeholder="PT Bank Nusantara"
+                      className="mt-2 w-full rounded-lg border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-white placeholder-zinc-600 transition-colors focus:border-white focus:bg-white/5 focus:outline-none"
                     />
                   </div>
 
                   <div>
-                    <label className="block font-mono text-xs text-zinc-400">
-                      FOKUS LAYANAN
+                    <label htmlFor="contact-service" className="block font-sans text-xs text-zinc-400">
+                      Fokus Layanan
                     </label>
                     <select
+                      id="contact-service"
                       value={formData.service}
                       onChange={(e) => setFormData({ ...formData, service: e.target.value })}
-                      className="mt-2 w-full rounded-xl border border-white/10 bg-[#121217] px-4 py-3 text-sm text-white transition-colors focus:border-white/40 focus:outline-none"
+                      className="mt-2 w-full rounded-lg border border-white/10 bg-[#121217] px-4 py-3 text-sm text-white transition-colors focus:border-white focus:outline-none"
                     >
-                      <option value="AI & Machine Learning">AI & Machine Learning</option>
-                      <option value="Cloud & DevOps">Cloud & Modern DevOps</option>
-                      <option value="Cybersecurity">Cybersecurity Zero Trust</option>
-                      <option value="Enterprise Custom Software">Enterprise Custom Software</option>
-                      <option value="Konsultasi Komprehensif">Konsultasi Komprehensif</option>
+                      <option value="Web Development">Web Development (Enterprise & Portal)</option>
+                      <option value="Mobile App Development">Mobile App Development (iOS & Android)</option>
+                      <option value="Web App Development">Web App & SaaS Development</option>
+                      <option value="Konsultasi Kustom">Konsultasi Arsitektur & Modernisasi</option>
                     </select>
                   </div>
                 </div>
 
                 <div>
-                  <label className="block font-mono text-xs text-zinc-400">
-                    DESKRIPSI KEBUTUHAN / PESAN *
+                  <label htmlFor="contact-message" className="block font-sans text-xs text-zinc-400">
+                    Spesifikasi Kebutuhan / Permasalahan Sistem *
                   </label>
                   <textarea
+                    id="contact-message"
                     required
                     rows={4}
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    placeholder="Ceritakan gambaran sistem atau permasalahan teknologi yang ingin Anda selesaikan..."
-                    className="mt-2 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-zinc-600 transition-colors focus:border-white/40 focus:bg-white/10 focus:outline-none"
+                    placeholder="Jelaskan kebutuhan arsitektur, kapasitas beban, atau target implementasi sistem Anda..."
+                    className="mt-2 w-full rounded-lg border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-white placeholder-zinc-600 transition-colors focus:border-white focus:bg-white/5 focus:outline-none font-sans"
                   />
                 </div>
 
@@ -186,33 +179,68 @@ export const ContactSection: React.FC = () => {
                   variant="primary"
                   className="w-full"
                 >
-                  <Send className="h-4 w-4" />
-                  <span>{isSubmitting ? "Mengirim Pesan..." : "Kirim Permintaan Konsultasi"}</span>
+                  <GlyphSend className="h-3.5 w-3.5" />
+                  <span className="text-xs tracking-wider uppercase font-semibold">
+                    {isSubmitting ? "Mengirimkan Data..." : "Kirim Permintaan Konsultasi"}
+                  </span>
                 </MagneticButton>
               </form>
             )}
           </div>
 
-          {/* Right Column: Interactive Terminal */}
-          <div className="lg:col-span-6 flex flex-col gap-6">
-            <TerminalConsole />
+          {/* Right Column: Editorial Statement & Corporate Presence */}
+          <div className="lg:col-span-6 flex flex-col justify-between h-full space-y-8">
+            
+            {/* Statement Quote Card */}
+            <div className="p-8 sm:p-10 rounded-2xl border border-white/10 bg-white/[0.02]">
+              <span className="font-sans text-xs tracking-widest text-zinc-400 uppercase">
+                Prinsip Kerjasama
+              </span>
+              <blockquote className="mt-4 font-serif text-2xl sm:text-3xl text-white font-normal leading-snug">
+                &ldquo;Arsitektur teknologi terbaik tidak lahir dari kebetulan, melainkan dari presisi rekayasa dan dedikasi pada performa tertinggi.&rdquo;
+              </blockquote>
+              <p className="mt-6 font-sans text-sm text-zinc-400 leading-relaxed">
+                Setiap permohonan konsultasi ditinjau langsung oleh Principal Solutions Architect kami. Kami menjamin analisis kesiapan awal dan SLA terukur sebelum sesi diskusi teknis dimulai.
+              </p>
 
-            {/* Quick Contact Badges */}
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-              <div className="rounded-2xl border border-white/5 bg-white/[0.02] p-4 text-center">
-                <Mail className="mx-auto h-5 w-5 text-zinc-400" />
-                <p className="mt-2 font-mono text-[11px] text-zinc-400">contact@intelecta.id</p>
-              </div>
-              <div className="rounded-2xl border border-white/5 bg-white/[0.02] p-4 text-center">
-                <Phone className="mx-auto h-5 w-5 text-zinc-400" />
-                <p className="mt-2 font-mono text-[11px] text-zinc-400">+62 812-8900-1926</p>
-              </div>
-              <div className="rounded-2xl border border-white/5 bg-white/[0.02] p-4 text-center">
-                <MapPin className="mx-auto h-5 w-5 text-zinc-400" />
-                <p className="mt-2 font-mono text-[11px] text-zinc-400">SCBD, Jakarta Selatan</p>
+              {/* Assurances List */}
+              <div className="mt-8 pt-6 border-t border-white/10 space-y-3 text-xs font-sans text-zinc-300">
+                <div className="flex items-center gap-3">
+                  <span className="h-1.5 w-1.5 rounded-full bg-white" />
+                  <span>Respon resmi tertulis dalam kurun waktu &lt; 24 jam kerja</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className="h-1.5 w-1.5 rounded-full bg-white" />
+                  <span>Seluruh data dilindungi Perjanjian Kerahasiaan (NDA) standar korporat</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className="h-1.5 w-1.5 rounded-full bg-white" />
+                  <span>Kepatuhan penuh standar ISO 27001 dan UU Perlindungan Data Pribadi</span>
+                </div>
               </div>
             </div>
+
+            {/* Direct Contact Channels */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div className="rounded-xl border border-white/10 bg-white/[0.02] p-5 text-center">
+                <GlyphMail className="mx-auto h-4 w-4 text-zinc-400" />
+                <span className="mt-2 font-sans text-xs text-zinc-400 block">Surel Resmi</span>
+                <p className="mt-0.5 font-sans text-xs font-medium text-white">advisory@intelecta.id</p>
+              </div>
+              <div className="rounded-xl border border-white/10 bg-white/[0.02] p-5 text-center">
+                <GlyphPhone className="mx-auto h-4 w-4 text-zinc-400" />
+                <span className="mt-2 font-sans text-xs text-zinc-400 block">Saluran Langsung</span>
+                <p className="mt-0.5 font-sans text-xs font-medium text-white">+62 812-8900-1926</p>
+              </div>
+              <div className="rounded-xl border border-white/10 bg-white/[0.02] p-5 text-center">
+                <GlyphLocation className="mx-auto h-4 w-4 text-zinc-400" />
+                <span className="mt-2 font-sans text-xs text-zinc-400 block">Kantor Pusat</span>
+                <p className="mt-0.5 font-sans text-xs font-medium text-white">SCBD, Jakarta Selatan</p>
+              </div>
+            </div>
+
           </div>
+
         </div>
       </div>
     </section>
