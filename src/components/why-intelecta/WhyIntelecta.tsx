@@ -1,222 +1,409 @@
 "use client";
 
-import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { ShieldCheck, Zap, Server, Maximize2, Sparkles, ArrowRight } from "lucide-react";
+import React, { useState, useRef, useEffect } from "react";
+import { AnimatePresence } from "framer-motion";
+import { PanelTransition } from "@/components/transitions/PanelTransition";
 import { cn } from "@/lib/utils";
+import { gsap } from "@/lib/gsap-config";
 
-const pillars = [
+interface PillarItem {
+  id: string;
+  num: string;
+  title: string;
+  metric: string;
+  metricUnit?: string;
+  metricLabel: string;
+  lead: string;
+  description: string;
+  principles: { label: string; detail: string }[];
+}
+
+const pillars: PillarItem[] = [
   {
     id: "keandalan",
     num: "01",
-    title: "Keandalan Ekstrem (High Reliability)",
-    short: "Uptime 99.99%",
-    icon: Server,
+    title: "Keandalan Tanpa Kompromi",
+    metric: "99.99%",
+    metricLabel: "Uptime SLA Bergaransi Kontraktual",
+    lead: "Arsitektur otonom zero single-point-of-failure dengan toleransi kegagalan tingkat enterprise.",
     description:
-      "Arsitektur zero single-point-of-failure dengan auto-failover antar zona dan region. Sistem dirancang untuk terus berjalan tanpa henti meski terjadi gangguan jaringan pada skala nasional.",
-    points: [
-      "Multi-Region Active-Active Topology",
-      "Automated Health Probes & Chaos Engineering",
-      "Disaster Recovery RPO < 1 menit & RTO < 5 menit",
+      "Sistem dirancang untuk terus beroperasi tanpa degradasi layanan bahkan saat terjadi lonjakan trafik masif atau pemadaman total pada salah satu zona data center.",
+    principles: [
+      {
+        label: "Multi-Region Active Quorum",
+        detail: "Replikasi data sinkron otomatis lintas data center regional dengan konsensus Raft tanpa data loss.",
+      },
+      {
+        label: "Disaster Recovery Sub-Detik",
+        detail: "Automated failover tanpa campur tangan teknisi manual dengan RPO < 1 menit dan RTO < 5 detik.",
+      },
+      {
+        label: "Chaos Engineering Rutin",
+        detail: "Pengujian simulasi kegagalan berkala untuk memvalidasi ketahanan cluster produksi secara proaktif.",
+      },
     ],
-    visualCode: `// Multi-Region Failover Controller
-const cluster = new DistributedCluster({
-  regions: ["ap-southeast-1", "ap-southeast-3"],
-  replication: "synchronous-quorum",
-  failoverLatency: "< 850ms",
-  healthState: "OPTIMAL_ACTIVE"
-});`,
   },
   {
     id: "kecepatan",
     num: "02",
-    title: "Kecepatan & Performa Sub-Milidetik",
-    short: "Sub-10ms P99",
-    icon: Zap,
+    title: "Performa Sub-Milidetik",
+    metric: "< 8.4",
+    metricUnit: "ms",
+    metricLabel: "P99 Latency Response Teruji",
+    lead: "Optimalisasi algoritma pada tingkat kernel dan edge network untuk respons instan.",
     description:
-      "Pengoptimalan algoritma pada tingkat kernel dan edge network. Setiap baris kode ditulis dengan efisiensi memori tingkat tinggi untuk menangani lonjakan jutaan data secara instan.",
-    points: [
-      "High-Performance Go & Rust Microservices",
-      "Global Edge Caching & Kernel-Bypass Networking",
-      "Query Optimization & Non-Blocking Async IO",
+      "Setiap pipeline komputasi direkayasa dengan Go dan Rust untuk meminimalkan beban memori dan context switching pada jutaan transaksi simultan.",
+    principles: [
+      {
+        label: "Kernel-Bypass Networking",
+        detail: "Meniadakan overhead stack IO tradisional dengan memanfaatkan memory bypass dan eBPF telemetry.",
+      },
+      {
+        label: "Global Edge Caching",
+        detail: "Distribusi konten statis dan dinamis pada puluhan titik edge terdekat dari lokasi pengguna.",
+      },
+      {
+        label: "Non-Blocking Async IO",
+        detail: "Pemrosesan transaksi konkuren tanpa bottleneck locking database pada jam sibuk operasional.",
+      },
     ],
-    visualCode: `// High-Throughput Event Ingestion
-func HandleEventStream(ctx context.Context, stream <-chan Event) {
-  workerPool := runtime.NumCPU() * 4
-  parallelDispatch(stream, workerPool, func(e Event) {
-    p99Latency := recordMetric(e) // 4.2ms avg
-  })
-}`,
   },
   {
     id: "keamanan",
     num: "03",
-    title: "Keamanan Tanpa Kepercayaan (Zero Trust)",
-    short: "Zero Trust Architecture",
-    icon: ShieldCheck,
+    title: "Keamanan Zero Trust",
+    metric: "AES-256",
+    metricLabel: "Enkripsi Lapis Ganda + Mutual TLS",
+    lead: "Prinsip 'Never Trust, Always Verify' di setiap titik transmisi dan penyimpanan data.",
     description:
-      "Pendekatan 'Never Trust, Always Verify' di setiap layer transmisi data. Enkripsi AES-256 dan protokol identitas terpusat memastikan integritas data dari ancaman internal maupun eksternal.",
-    points: [
-      "Mutual TLS (mTLS) pada Seluruh Komunikasi Internal",
-      "Identity-Aware Access Proxy & Dynamic Secrets Vault",
-      "Kepatuhan Penuh ISO 27001 & Regulasi UU PDP",
+      "Standarisasi keamanan berstandar perbankan dengan audit trail yang terenkripsi dan verifikasi identitas berkelanjutan pada seluruh microservices.",
+    principles: [
+      {
+        label: "End-to-End Mutual TLS",
+        detail: "Enkripsi sertifikat otomatis pada setiap pertukaran paket antar service internal dalam cluster.",
+      },
+      {
+        label: "Identity-Aware Dynamic Vault",
+        detail: "Manajemen kredensial dan secret rotasi otomatis tanpa menyimpan kunci statis dalam kode program.",
+      },
+      {
+        label: "Kepatuhan Regulasi Penuh",
+        detail: "Audit berkala yang tersertifikasi sesuai standar ISO/IEC 27001 dan kepatuhan UU Perlindungan Data Pribadi.",
+      },
     ],
-    visualCode: `// Zero Trust Policy Enforcement
-policy := SecurityPolicy{
-  mTLSRequired: true,
-  cipherSuite: "TLS_AES_256_GCM_SHA384",
-  accessEvaluation: ContinuousIdentityVerification,
-  auditLogging: "Immutable-Signed-Ledger"
-}`,
   },
   {
     id: "skalabilitas",
     num: "04",
-    title: "Skalabilitas Elastis & Tanpa Batas",
-    short: "Elastic Scalability",
-    icon: Maximize2,
+    title: "Skalabilitas Elastis",
+    metric: "1,000+",
+    metricUnit: "Pods",
+    metricLabel: "Kapasitas Komputasi Otonom",
+    lead: "Infrastruktur cloud yang beradaptasi secara otomatis mengikuti kurva volume bisnis.",
     description:
-      "Infrastruktur modern yang secara otonom beradaptasi dengan fluktuasi beban pengguna. Tidak ada batasan kapasitas ketika bisnis Anda tumbuh 10x hingga 100x lipat.",
-    points: [
-      "Horizontal Pod Autoscaling berbasis Metrik Custom",
-      "Distributed Partitioning & Sharding Database",
-      "Serverless Burst Capacity Handling",
+      "Kapasitas beban dapat berlipat ganda dalam hitungan detik tanpa perlu intervensi manual atau perencanaan kapasitas kaku di awal.",
+    principles: [
+      {
+        label: "Predictive Horizontal Autoscaling",
+        detail: "Penyesuaian jumlah pod secara presisi dalam < 15 detik sebelum antrean beban memuncak.",
+      },
+      {
+        label: "Distributed Sharding & Partitioning",
+        detail: "Pemisahan partisi database terdistribusi untuk menjamin kecepatan query tetap konstan pada dataset masif.",
+      },
+      {
+        label: "Serverless Burst Capacity",
+        detail: "Cadangan daya komputasi instan untuk mengamankan lonjakan trafik promosi tanpa batas.",
+      },
     ],
-    visualCode: `// Elastic Auto-Scaler
-apiVersion: autoscaling/v2
-kind: HorizontalPodAutoscaler
-metadata:
-  name: intelecta-core-engine
-spec:
-  minReplicas: 10
-  maxReplicas: 1000
-  metrics:
-    - type: Resource
-      resource:
-        name: cpu
-        target:
-          averageUtilization: 60`,
   },
 ];
 
 export const WhyIntelecta: React.FC = () => {
   const [activePillar, setActivePillar] = useState(0);
+  const [direction, setDirection] = useState(1);
+  const sectionRef = useRef<HTMLElement>(null);
+  const logoSvgRef = useRef<SVGSVGElement>(null);
+  const outerPathRef = useRef<SVGPolygonElement>(null);
+  const midPathRef = useRef<SVGPolygonElement>(null);
+  const corePathRef = useRef<SVGPolygonElement>(null);
+
+  // GSAP Materialization Animation for Monumental Right Edge Logo
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      if (!sectionRef.current || !logoSvgRef.current) return;
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 75%",
+          end: "bottom 30%",
+          toggleActions: "play reverse play reverse",
+        },
+      });
+
+      tl.fromTo(
+        outerPathRef.current,
+        {
+          strokeDasharray: 2000,
+          strokeDashoffset: 2000,
+          opacity: 0,
+          scale: 0.85,
+          transformOrigin: "center right",
+        },
+        {
+          strokeDashoffset: 0,
+          opacity: 0.7,
+          scale: 1,
+          duration: 1.4,
+          ease: "power3.out",
+        }
+      )
+        .fromTo(
+          midPathRef.current,
+          {
+            strokeDasharray: 1500,
+            strokeDashoffset: 1500,
+            opacity: 0,
+            scale: 0.7,
+            transformOrigin: "center right",
+          },
+          {
+            strokeDashoffset: 0,
+            opacity: 0.6,
+            scale: 1,
+            duration: 1.2,
+            ease: "power3.out",
+          },
+          "-=1.0"
+        )
+        .fromTo(
+          corePathRef.current,
+          {
+            scale: 0,
+            opacity: 0,
+            transformOrigin: "center center",
+          },
+          {
+            scale: 1,
+            opacity: 0.8,
+            duration: 0.9,
+            ease: "elastic.out(1.2, 0.4)",
+          },
+          "-=0.7"
+        );
+
+      // Subtle breathing motion
+      gsap.to(logoSvgRef.current, {
+        y: -10,
+        rotation: 0.8,
+        duration: 5,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+      });
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
+  const handlePillarChange = (idx: number) => {
+    if (idx === activePillar) return;
+    setDirection(idx > activePillar ? 1 : -1);
+    setActivePillar(idx);
+  };
+
+  const currentPillar = pillars[activePillar];
 
   return (
-    <section id="keunggulan" className="relative py-28 bg-[#030303]">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto">
-          <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 backdrop-blur-md">
-            <Sparkles className="h-3.5 w-3.5 text-zinc-300" />
-            <span className="font-mono text-xs uppercase tracking-wider text-zinc-400">
-              MENGAPA MEMILIH INTELECTA
-            </span>
-          </div>
+    <section
+      ref={sectionRef}
+      id="keunggulan"
+      className="relative min-h-screen py-24 sm:py-32 bg-[#030303] overflow-hidden border-t border-white/10 flex items-center"
+    >
+      {/* Monumental Watermark Logo on Right Edge */}
+      <div className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/3 sm:translate-x-1/4 lg:translate-x-1/6 w-[500px] sm:w-[700px] md:w-[850px] lg:w-[1050px] h-[700px] sm:h-[900px] lg:h-[1100px] z-0 opacity-40 select-none">
+        <svg
+          ref={logoSvgRef}
+          viewBox="0 0 1000 1000"
+          className="w-full h-full"
+          fill="none"
+        >
+          <defs>
+            <linearGradient id="whyOuterGrad" x1="200" y1="100" x2="800" y2="900" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.8" />
+              <stop offset="50%" stopColor="#71717A" stopOpacity="0.4" />
+              <stop offset="100%" stopColor="#18181B" stopOpacity="0.1" />
+            </linearGradient>
+            <linearGradient id="whyMidGrad" x1="300" y1="200" x2="700" y2="800" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.7" />
+              <stop offset="100%" stopColor="#52525B" stopOpacity="0.2" />
+            </linearGradient>
+          </defs>
 
-          <h2 className="mt-6 font-display text-3xl font-extrabold text-white sm:text-4xl lg:text-5xl">
-            4 Pilar Fundamental Arsitektur Intelecta
+          <polygon
+            ref={outerPathRef}
+            points="500,50 950,500 500,950 50,500"
+            stroke="url(#whyOuterGrad)"
+            strokeWidth="24"
+            strokeLinejoin="miter"
+            strokeMiterlimit="10"
+          />
+
+          <polygon
+            points="500,18 982,500 500,982 18,500"
+            stroke="rgba(255,255,255,0.15)"
+            strokeWidth="2"
+            strokeDasharray="16 12"
+          />
+
+          <polygon
+            ref={midPathRef}
+            points="500,200 800,500 500,800 200,500"
+            stroke="url(#whyMidGrad)"
+            strokeWidth="16"
+            strokeLinejoin="miter"
+            strokeMiterlimit="10"
+          />
+
+          <polygon
+            ref={corePathRef}
+            points="500,350 650,500 500,650 350,500"
+            stroke="rgba(255,255,255,0.6)"
+            strokeWidth="4"
+          />
+        </svg>
+      </div>
+
+      <div className="mx-auto max-w-7xl px-6 sm:px-10 lg:px-12 w-full relative z-10">
+        
+        {/* Editorial Section Header */}
+        <div className="max-w-3xl border-b border-white/10 pb-8">
+          <span className="font-sans text-xs tracking-widest text-zinc-400 uppercase">
+            Pondasi Arsitektur Korporat
+          </span>
+          <h2 className="mt-3 font-serif text-3xl sm:text-4xl lg:text-5xl text-white font-normal leading-tight">
+            4 Pilar Fundamental Intelecta
           </h2>
-
-          <p className="mt-4 text-base text-zinc-400">
-            Filosofi rekayasa yang kami terapkan untuk memastikan setiap sistem yang kami bangun
-            siap menghadapi tuntutan operasional paling berat.
+          <p className="mt-4 font-sans text-base text-zinc-400 leading-relaxed max-w-2xl">
+            Prinsip rekayasa tanpa kompromi untuk memastikan setiap infrastruktur siap menghadapi beban jutaan transaksi dan ancaman siber modern.
           </p>
         </div>
 
-        {/* Pillars Navigation & Content */}
-        <div className="mt-16 grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-12">
-          {/* Left Column: Vertical Step List */}
-          <div className="space-y-3 lg:col-span-5">
-            {pillars.map((pillar, idx) => {
-              const isActive = activePillar === idx;
-              const Icon = pillar.icon;
-
-              return (
-                <button
-                  key={pillar.id}
-                  onClick={() => setActivePillar(idx)}
-                  className={cn(
-                    "w-full text-left rounded-2xl p-6 transition-all duration-300 border",
-                    isActive
-                      ? "bg-surface border-white/20 shadow-[0_0_30px_rgba(255,255,255,0.06)]"
-                      : "bg-surface/30 border-white/5 hover:border-white/10 hover:bg-surface/60"
-                  )}
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <span className="font-mono text-xs font-bold text-zinc-500">
-                        {pillar.num}
-                      </span>
-                      <Icon className={cn("h-5 w-5", isActive ? "text-white" : "text-zinc-500")} />
-                      <h3 className={cn("text-base font-bold", isActive ? "text-white" : "text-zinc-400")}>
-                        {pillar.title}
-                      </h3>
-                    </div>
-
-                    <span className="rounded-full bg-white/5 px-2.5 py-0.5 font-mono text-[10px] text-zinc-400">
-                      {pillar.short}
-                    </span>
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Right Column: Active Pillar Detailed Card */}
-          <div className="lg:col-span-7">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={pillars[activePillar].id}
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.35 }}
-                className="flex flex-col justify-between rounded-3xl border border-white/15 bg-surface/90 p-8 sm:p-10 backdrop-blur-xl h-full"
+        {/* Minimalist Tactile Pillar Switcher Tabs */}
+        <div className="mt-8 flex flex-wrap gap-2">
+          {pillars.map((pillar, idx) => {
+            const isActive = activePillar === idx;
+            return (
+              <button
+                key={pillar.id}
+                onClick={() => handlePillarChange(idx)}
+                className={cn(
+                  "px-4 py-2.5 rounded-full text-xs font-medium transition-all duration-300 flex items-center gap-2.5 border",
+                  isActive
+                    ? "bg-white text-black font-semibold border-white shadow-[0_0_20px_rgba(255,255,255,0.25)]"
+                    : "bg-white/[0.03] border-white/10 text-zinc-400 hover:border-white/25 hover:text-white"
+                )}
               >
-                <div>
-                  <div className="flex items-center justify-between border-b border-white/10 pb-6">
-                    <div>
-                      <span className="font-mono text-xs text-zinc-400">
-                        PILAR ARSITEKTUR {pillars[activePillar].num}
-                      </span>
-                      <h3 className="mt-1 font-display text-2xl font-bold text-white">
-                        {pillars[activePillar].title}
-                      </h3>
-                    </div>
+                <span className={cn("text-[10px] font-mono", isActive ? "text-zinc-600" : "text-zinc-500")}>
+                  {pillar.num}
+                </span>
+                <span>{pillar.title}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* ========================================================================= */}
+        {/* CENTER STAGE: ZERO-BLEED CIRCULAR REVEAL PANEL TRANSITION                 */}
+        {/* ========================================================================= */}
+        <div className="mt-10 relative min-h-[440px] sm:min-h-[400px] w-full overflow-hidden rounded-2xl border border-white/10 bg-[#08080C]/80 backdrop-blur-xl p-8 sm:p-12">
+          <AnimatePresence mode="popLayout" custom={direction}>
+            <PanelTransition
+              key={currentPillar.id}
+              activeKey={currentPillar.id}
+              variant="circular"
+              direction={direction}
+              className="p-0 relative"
+            >
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start h-full">
+                
+                {/* Left Editorial Narrative (7 Columns) */}
+                <div className="lg:col-span-7 flex flex-col justify-between h-full">
+                  <div>
+                    <span className="font-sans text-xs tracking-widest text-zinc-400 uppercase">
+                      Pilar 0{activePillar + 1}
+                    </span>
+                    <h3 className="mt-2 font-serif text-3xl sm:text-4xl text-white font-normal">
+                      {currentPillar.title}
+                    </h3>
+                    <p className="mt-3 font-sans text-base text-zinc-300 font-medium leading-relaxed">
+                      {currentPillar.lead}
+                    </p>
+                    <p className="mt-2 font-sans text-sm text-zinc-400 leading-relaxed">
+                      {currentPillar.description}
+                    </p>
                   </div>
 
-                  <p className="mt-6 text-base leading-relaxed text-zinc-300">
-                    {pillars[activePillar].description}
-                  </p>
-
-                  <div className="mt-6 space-y-3">
-                    {pillars[activePillar].points.map((point) => (
-                      <div key={point} className="flex items-start gap-3 text-sm text-zinc-300">
-                        <div className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-white shadow-[0_0_8px_#fff]" />
-                        <span>{point}</span>
+                  {/* Core Architectural Principles List */}
+                  <div className="mt-8 space-y-4 pt-6 border-t border-white/10">
+                    {currentPillar.principles.map((pr, i) => (
+                      <div key={pr.label} className="flex items-start gap-3">
+                        <span className="font-mono text-xs text-zinc-400 font-bold shrink-0 mt-0.5">
+                          0{i + 1}
+                        </span>
+                        <div>
+                          <h4 className="font-sans text-xs sm:text-sm font-semibold text-white">
+                            {pr.label}
+                          </h4>
+                          <p className="font-sans text-xs text-zinc-400 mt-0.5 leading-relaxed">
+                            {pr.detail}
+                          </p>
+                        </div>
                       </div>
                     ))}
                   </div>
                 </div>
 
-                {/* Code Terminal Snippet */}
-                <div className="mt-8 overflow-hidden rounded-2xl border border-white/10 bg-black/60 font-mono text-xs text-zinc-300 shadow-inner">
-                  <div className="flex items-center justify-between border-b border-white/5 bg-white/[0.02] px-4 py-2 text-[11px] text-zinc-500">
-                    <span className="flex items-center gap-2">
-                      <span className="h-2 w-2 rounded-full bg-zinc-600" />
-                      architecture-spec.ts
+                {/* Right Monumental KPI Display (5 Columns) */}
+                <div className="lg:col-span-5 flex flex-col justify-between h-full lg:border-l lg:border-white/10 lg:pl-10">
+                  <div className="p-6 rounded-xl bg-white/[0.02] border border-white/8">
+                    <span className="font-sans text-xs text-zinc-400 uppercase tracking-wider">
+                      Tolok Ukur Kinerja Utama
                     </span>
-                    <span>ACTIVE CONFIG</span>
+                    <div className="mt-3 flex items-baseline gap-2">
+                      <span className="font-serif text-5xl sm:text-6xl lg:text-7xl font-light text-white tracking-tight">
+                        {currentPillar.metric}
+                      </span>
+                      {currentPillar.metricUnit && (
+                        <span className="font-sans text-xl text-zinc-400 font-normal">
+                          {currentPillar.metricUnit}
+                        </span>
+                      )}
+                    </div>
+                    <p className="mt-2 font-sans text-xs text-zinc-300">
+                      {currentPillar.metricLabel}
+                    </p>
                   </div>
-                  <pre className="p-4 overflow-x-auto text-[11px] leading-relaxed text-zinc-300">
-                    <code>{pillars[activePillar].visualCode}</code>
-                  </pre>
+
+                  {/* Architectural Standards Footnote */}
+                  <div className="mt-8 pt-6 border-t border-white/10 text-xs font-sans text-zinc-400 space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span>STANDAR IMPLEMENTASI</span>
+                      <span className="text-zinc-400">ENTERPRISE GRADE</span>
+                    </div>
+                    <p className="text-[11px] leading-relaxed text-zinc-400">
+                      Setiap parameter diuji melalui automated benchmarking dan monitoring real-time sebelum deployment produksi.
+                    </p>
+                  </div>
+
                 </div>
-              </motion.div>
-            </AnimatePresence>
-          </div>
+
+              </div>
+            </PanelTransition>
+          </AnimatePresence>
         </div>
+
       </div>
     </section>
   );
