@@ -40,7 +40,7 @@ export const ContactSection: React.FC = () => {
           <span className="font-sans text-xs tracking-widest text-zinc-400 uppercase">
             Inisiasi Kerjasama
           </span>
-          <h2 className="mt-3 font-serif text-3xl sm:text-4xl lg:text-5xl text-white font-normal leading-tight">
+          <h2 className="mt-3 font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold uppercase tracking-tight text-white leading-tight">
             Mari Rancang Masa Depan Bersama
           </h2>
           <p className="mt-4 font-sans text-base text-zinc-400 leading-relaxed max-w-2xl">
@@ -53,7 +53,7 @@ export const ContactSection: React.FC = () => {
           
           {/* Left Column: Contact Form */}
           <div className="rounded-2xl border border-white/10 bg-[#08080C]/80 p-8 sm:p-10 backdrop-blur-xl lg:col-span-6">
-            <h3 className="font-serif text-2xl text-white font-normal">
+            <h3 className="font-display text-xl sm:text-2xl font-extrabold uppercase tracking-tight text-white">
               Kirim Permintaan Konsultasi
             </h3>
             <p className="mt-1 font-sans text-xs text-zinc-400">
@@ -69,7 +69,7 @@ export const ContactSection: React.FC = () => {
                 <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white">
                   <GlyphCheck className="h-5 w-5" />
                 </div>
-                <h4 className="mt-4 font-serif text-2xl text-white font-normal">
+                <h4 className="mt-4 font-display text-xl sm:text-2xl font-extrabold uppercase tracking-tight text-white">
                   Permintaan Berhasil Terkirim
                 </h4>
                 <p className="mt-2 font-sans text-sm text-zinc-300">
@@ -196,7 +196,7 @@ export const ContactSection: React.FC = () => {
               <span className="font-sans text-xs tracking-widest text-zinc-400 uppercase">
                 Prinsip Kerjasama
               </span>
-              <blockquote className="mt-4 font-serif text-2xl sm:text-3xl text-white font-normal leading-snug">
+              <blockquote className="mt-4 font-display text-xl sm:text-2xl font-bold uppercase tracking-tight text-white leading-snug">
                 &ldquo;Arsitektur teknologi terbaik tidak lahir dari kebetulan, melainkan dari presisi rekayasa dan dedikasi pada performa tertinggi.&rdquo;
               </blockquote>
               <p className="mt-6 font-sans text-sm text-zinc-400 leading-relaxed">

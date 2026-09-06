@@ -35,7 +35,7 @@ export const ServicesMatrix: React.FC = () => {
             <span className="font-sans text-xs tracking-widest text-zinc-400 uppercase">
               Kapabilitas Layanan
             </span>
-            <h2 className="mt-3 font-serif text-3xl sm:text-4xl lg:text-5xl text-white font-normal leading-tight">
+            <h2 className="mt-3 font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold uppercase tracking-tight text-white leading-tight">
               Solusi Arsitektur Skala Enterprise
             </h2>
           </div>
@@ -82,7 +82,7 @@ export const ServicesMatrix: React.FC = () => {
                   <span className={cn("text-[11px] uppercase tracking-wider block", isActive ? "text-zinc-700" : "text-zinc-500")}>
                     {service.category}
                   </span>
-                  <h3 className={cn("mt-1 font-serif text-lg sm:text-xl font-normal leading-snug", isActive ? "text-black" : "text-white")}>
+                  <h3 className={cn("mt-1 font-display text-base sm:text-lg font-extrabold uppercase tracking-tight leading-snug", isActive ? "text-black" : "text-white")}>
                     {service.title}
                   </h3>
                 </div>
@@ -113,7 +113,7 @@ export const ServicesMatrix: React.FC = () => {
                       <span className="font-sans text-xs text-zinc-400 uppercase tracking-wider block">
                         {activeService.category}
                       </span>
-                      <h3 className="font-serif text-2xl sm:text-3xl text-white font-normal">
+                      <h3 className="font-display text-2xl sm:text-3xl font-extrabold uppercase tracking-tight text-white">
                         {activeService.title}
                       </h3>
                     </div>
@@ -164,7 +164,7 @@ export const ServicesMatrix: React.FC = () => {
                     <span className="font-sans text-xs text-zinc-400 font-medium block">
                       Target Terverifikasi
                     </span>
-                    <p className="mt-2 font-serif text-2xl sm:text-3xl text-white font-normal">
+                    <p className="mt-2 font-display text-2xl sm:text-3xl font-extrabold uppercase tracking-tight text-white">
                       {activeService.metrics}
                     </p>
                   </div>
