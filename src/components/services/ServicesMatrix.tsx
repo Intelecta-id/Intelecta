@@ -27,7 +27,7 @@ export const ServicesMatrix: React.FC = () => {
   const ActiveGlyph = glyphMap[activeService.iconName] || GlyphServer;
 
   return (
-    <section id="layanan" className="relative py-24 sm:py-32 bg-[#040406] border-t border-white/10">
+    <section id="layanan" className="relative min-h-screen py-20 sm:py-28 bg-[#040406] border-t border-white/10 flex flex-col justify-center">
       <div className="mx-auto max-w-7xl px-6 sm:px-10 lg:px-12">
         {/* Section Header */}
         <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-end border-b border-white/10 pb-8">

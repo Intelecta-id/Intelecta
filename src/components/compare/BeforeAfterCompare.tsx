@@ -1,511 +1,330 @@
 "use client";
 
 import React, { useRef, useState, useEffect } from "react";
-import { useScroll } from "framer-motion";
-import { AnimatePresence } from "framer-motion";
-import { PanelTransition } from "@/components/transitions/PanelTransition";
-import { GlyphArrowUpRight } from "@/components/ui/TechnicalGlyphs";
+import { gsap, ScrollTrigger } from "@/lib/gsap-config";
 import { cn } from "@/lib/utils";
-
-interface ComparisonPanelData {
-  idx: number;
-  tag: string;
-  tabTitle: string;
-}
-
-const tabs: ComparisonPanelData[] = [
-  { idx: 0, tag: "01", tabTitle: "Sistem Legacy" },
-  { idx: 1, tag: "02", tabTitle: "Rekayasa Ulang" },
-  { idx: 2, tag: "03", tabTitle: "Arsitektur Intelecta" },
-  { idx: 3, tag: "04", tabTitle: "Matriks Dampak" },
-];
+import { GlyphArrowRight, GlyphShield, GlyphCpu, GlyphServer, GlyphActivity } from "@/components/ui/TechnicalGlyphs";
 
 export const BeforeAfterCompare: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [activePanelIndex, setActivePanelIndex] = useState(0);
-  const [direction, setDirection] = useState(1);
-  const isProgrammaticScroll = useRef(false);
+  const stickyRef = useRef<HTMLDivElement>(null);
+  const afterPanelRef = useRef<HTMLDivElement>(null);
+  const dividerLineRef = useRef<HTMLDivElement>(null);
+  const [splitPercent, setSplitPercent] = useState(0); // 0 (100% Before) to 100 (100% After)
+  const isDraggingRef = useRef(false);
 
-  // Scroll tracking container (320vh height to give a luxurious pacing)
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end end"],
-  });
-
-  // Synchronize scroll position with active panel index
   useEffect(() => {
-    const unsubscribe = scrollYProgress.on("change", (latest) => {
-      if (isProgrammaticScroll.current) return;
+    const container = containerRef.current;
+    const afterPanel = afterPanelRef.current;
+    const dividerLine = dividerLineRef.current;
+    if (!container || !afterPanel || !dividerLine) return;
 
-      let nextIndex = 0;
-      if (latest >= 0.75) nextIndex = 3;
-      else if (latest >= 0.5) nextIndex = 2;
-      else if (latest >= 0.25) nextIndex = 1;
-      else nextIndex = 0;
+    const ctx = gsap.context(() => {
+      // GSAP ScrollTrigger to scrub the Before vs After transition on scroll
+      const st = ScrollTrigger.create({
+        trigger: container,
+        start: "top top",
+        end: "bottom bottom",
+        scrub: 0.5,
+        onUpdate: (self) => {
+          if (isDraggingRef.current) return;
+          const p = self.progress; // 0 to 1
+          const pct = p * 100;
+          setSplitPercent(pct);
 
-      if (nextIndex !== activePanelIndex) {
-        setDirection(nextIndex > activePanelIndex ? 1 : -1);
-        setActivePanelIndex(nextIndex);
-      }
-    });
+          // Update clip path: reveal After panel from right to left
+          gsap.set(afterPanel, {
+            clipPath: `inset(0% 0% 0% ${100 - pct}%)`,
+          });
+          // Update divider position
+          gsap.set(dividerLine, {
+            left: `${pct}%`,
+          });
+        },
+      });
 
-    return () => unsubscribe();
-  }, [scrollYProgress, activePanelIndex]);
+      return () => {
+        st.kill();
+      };
+    }, container);
 
-  // Tab click transition with smooth scroll sync
-  const handleTabClick = (targetIndex: number) => {
-    if (targetIndex === activePanelIndex) return;
+    return () => ctx.revert();
+  }, []);
 
-    setDirection(targetIndex > activePanelIndex ? 1 : -1);
-    setActivePanelIndex(targetIndex);
-
+  // Programmatic snap for the quick toggle pill
+  const handleSnapTo = (targetState: "before" | "after") => {
     if (!containerRef.current) return;
-    isProgrammaticScroll.current = true;
-
     const rect = containerRef.current.getBoundingClientRect();
     const scrollTop = window.scrollY || document.documentElement.scrollTop;
     const containerTop = rect.top + scrollTop;
     const scrollDistance = rect.height - window.innerHeight;
-    const targetFraction = targetIndex / 3;
-    const targetScrollY = containerTop + scrollDistance * targetFraction;
+
+    const targetScrollY =
+      targetState === "before" ? containerTop : containerTop + scrollDistance;
 
     window.scrollTo({
       top: targetScrollY,
       behavior: "smooth",
     });
+  };
 
-    setTimeout(() => {
-      isProgrammaticScroll.current = false;
-    }, 800);
+  // Drag interaction on divider handle
+  const handleMouseDown = () => {
+    isDraggingRef.current = true;
+    const onMouseMove = (e: MouseEvent) => {
+      if (!isDraggingRef.current || !stickyRef.current) return;
+      const rect = stickyRef.current.getBoundingClientRect();
+      const clientX = e.clientX - rect.left;
+      const clampedPct = Math.max(0, Math.min(100, (clientX / rect.width) * 100));
+      setSplitPercent(clampedPct);
+
+      if (afterPanelRef.current) {
+        gsap.set(afterPanelRef.current, {
+          clipPath: `inset(0% 0% 0% ${100 - clampedPct}%)`,
+        });
+      }
+      if (dividerLineRef.current) {
+        gsap.set(dividerLineRef.current, {
+          left: `${clampedPct}%`,
+        });
+      }
+    };
+
+    const onMouseUp = () => {
+      isDraggingRef.current = false;
+      window.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("mouseup", onMouseUp);
+    };
+
+    window.addEventListener("mousemove", onMouseMove);
+    window.addEventListener("mouseup", onMouseUp);
   };
 
   return (
     <div
       ref={containerRef}
       id="transformasi"
-      className="relative w-full h-[320vh] bg-[#030303] overflow-visible"
+      className="relative w-full h-[250vh] bg-[#030303] select-none"
     >
-      {/* Sticky Full-Screen Isolated Viewport Container */}
-      <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-between bg-[#030303] text-white select-none">
-        
-        {/* Subtle Ambient Vignette & Canvas Grid */}
-        <div className="pointer-events-none absolute inset-0 bg-radial-gradient from-transparent via-black/40 to-black/90 z-0" />
-        <div className="pointer-events-none absolute inset-0 grid-pattern opacity-20 z-0" />
-
+      {/* Sticky Full-Screen Viewport */}
+      <div
+        ref={stickyRef}
+        className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-between bg-[#030303] text-white"
+      >
         {/* ========================================================================= */}
-        {/* TOP HEADER: Editorial Title & Tab Switcher                                */}
+        {/* TOP HEADER: Title & Tactile Before/After Switcher                         */}
         {/* ========================================================================= */}
-        <header className="relative z-30 w-full px-6 sm:px-12 lg:px-16 pt-20 sm:pt-24 pb-4 flex flex-col md:flex-row md:items-end md:justify-between gap-6 border-b border-white/10 backdrop-blur-md bg-black/40">
+        <header className="relative z-40 w-full px-6 sm:px-12 lg:px-16 pt-20 sm:pt-24 pb-4 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 border-b border-white/10 backdrop-blur-md bg-black/50">
           <div>
-            <span className="font-sans text-xs tracking-widest text-zinc-400 uppercase">
-              Transformasi Arsitektur
-            </span>
-            <h2 className="mt-1 font-serif text-2xl sm:text-3xl lg:text-4xl text-white font-normal tracking-tight">
-              Perbandingan Kinerja: <span className="italic font-normal text-zinc-400">Legacy vs Intelecta</span>
+            <div className="inline-flex items-center gap-2">
+              <span className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />
+              <span className="font-mono text-xs tracking-widest text-zinc-400 uppercase">
+                04 // BENCHMARK TRANSFORMASI TEKNOLOGI
+              </span>
+            </div>
+            <h2 className="mt-1 font-display text-xl sm:text-2xl lg:text-3xl font-extrabold uppercase tracking-tight text-white">
+              Perbandingan Kinerja: <span className="text-zinc-500">Before & After</span>
             </h2>
           </div>
 
-          {/* Minimalist Tactile Tab Bar */}
-          <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto pb-1 md:pb-0">
-            {tabs.map((tab) => {
-              const isActive = activePanelIndex === tab.idx;
-              return (
-                <button
-                  key={tab.idx}
-                  onClick={() => handleTabClick(tab.idx)}
-                  className={cn(
-                    "px-3.5 py-1.5 rounded-full text-xs transition-all duration-300 flex items-center gap-2 border",
-                    isActive
-                      ? "bg-white text-black font-semibold border-white shadow-[0_0_20px_rgba(255,255,255,0.25)]"
-                      : "bg-white/[0.03] border-white/10 text-zinc-400 hover:border-white/25 hover:text-white"
-                  )}
-                >
-                  <span className={cn("text-[10px] font-mono", isActive ? "text-zinc-600" : "text-zinc-500")}>
-                    {tab.tag}
-                  </span>
-                  <span>{tab.tabTitle}</span>
-                </button>
-              );
-            })}
+          {/* Minimalist 2-State Pill Switcher */}
+          <div className="flex items-center gap-2">
+            <div className="inline-flex items-center p-1 rounded-full border border-white/15 bg-black/60 backdrop-blur-xl">
+              <button
+                onClick={() => handleSnapTo("before")}
+                className={cn(
+                  "px-4 py-1.5 rounded-full text-xs font-mono transition-all duration-300",
+                  splitPercent < 50
+                    ? "bg-white text-black font-bold shadow-[0_0_15px_rgba(255,255,255,0.3)]"
+                    : "text-zinc-400 hover:text-white"
+                )}
+              >
+                01 BEFORE (LEGACY)
+              </button>
+              <button
+                onClick={() => handleSnapTo("after")}
+                className={cn(
+                  "px-4 py-1.5 rounded-full text-xs font-mono transition-all duration-300",
+                  splitPercent >= 50
+                    ? "bg-white text-black font-bold shadow-[0_0_15px_rgba(255,255,255,0.3)]"
+                    : "text-zinc-400 hover:text-white"
+                )}
+              >
+                02 AFTER (INTELECTA)
+              </button>
+            </div>
           </div>
         </header>
 
         {/* ========================================================================= */}
-        {/* CENTER STAGE: ZERO-BLEED ABSOLUTE STACKED PANELS                          */}
+        {/* CENTER STAGE: ON-SCROLL SPLIT STACKED PANELS                              */}
         {/* ========================================================================= */}
         <div className="relative z-10 w-full flex-1 overflow-hidden">
-          <AnimatePresence mode="popLayout" custom={direction}>
-            <PanelTransition
-              key={activePanelIndex}
-              activeKey={activePanelIndex}
-              variant="diagonal"
-              direction={direction}
-              className="px-6 sm:px-12 lg:px-16 py-8 sm:py-12 flex flex-col justify-center"
+          {/* --------------------------------------------------------------------- */}
+          {/* PANEL A: BEFORE (SISTEM LEGACY / MONOLITH KONVENSIONAL)              */}
+          {/* --------------------------------------------------------------------- */}
+          <div className="absolute inset-0 w-full h-full bg-[#070709] px-6 sm:px-12 lg:px-16 py-8 sm:py-12 flex flex-col justify-between">
+            {/* Top Narrative Row */}
+            <div className="max-w-4xl">
+              <div className="inline-flex items-center gap-2 rounded-full border border-red-500/30 bg-red-500/10 px-3 py-1 text-[11px] font-mono text-red-400">
+                <span>STATUS: AUDIT SISTEM LAMA // BOTTLENECK KRITIS</span>
+              </div>
+              <h3 className="mt-3 font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold uppercase tracking-tight text-white leading-tight">
+                Arsitektur Monolit Statis
+              </h3>
+              <p className="mt-3 font-sans text-sm sm:text-base text-zinc-400 leading-relaxed max-w-2xl">
+                Ketergantungan infrastruktur lama membatasi pertumbuhan bisnis. Saturasi beban tak terkendali saat lonjakan transaksi, memicu downtime berkala dan pemborosan komputasi.
+              </p>
+            </div>
+
+            {/* 4 Stark Problem Metrics Grid */}
+            <div className="my-6 grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+              <div className="rounded-xl border border-white/10 bg-white/[0.02] p-5">
+                <span className="font-mono text-xs text-zinc-500 uppercase block">01 Latensi P99</span>
+                <p className="font-display text-3xl sm:text-4xl font-extrabold uppercase text-red-400 mt-2">
+                  1,200 <span className="text-xs font-sans text-zinc-500">ms</span>
+                </p>
+                <p className="text-xs font-sans text-zinc-500 mt-2">Antrean request menumpuk di gateway monolit.</p>
+              </div>
+
+              <div className="rounded-xl border border-white/10 bg-white/[0.02] p-5">
+                <span className="font-mono text-xs text-zinc-500 uppercase block">02 Batas Transaksi</span>
+                <p className="font-display text-3xl sm:text-4xl font-extrabold uppercase text-amber-400 mt-2">
+                  2,400 <span className="text-xs font-sans text-zinc-500">req/s</span>
+                </p>
+                <p className="text-xs font-sans text-zinc-500 mt-2">Kapasitas server statis saturasi saat flash sale.</p>
+              </div>
+
+              <div className="rounded-xl border border-white/10 bg-white/[0.02] p-5">
+                <span className="font-mono text-xs text-zinc-500 uppercase block">03 Tingkat Kegagalan</span>
+                <p className="font-display text-3xl sm:text-4xl font-extrabold uppercase text-red-400 mt-2">
+                  4.82%
+                </p>
+                <p className="text-xs font-sans text-zinc-500 mt-2">Single availability zone tanpa failover otomatis.</p>
+              </div>
+
+              <div className="rounded-xl border border-white/10 bg-white/[0.02] p-5">
+                <span className="font-mono text-xs text-zinc-500 uppercase block">04 Rilis / Deployment</span>
+                <p className="font-display text-3xl sm:text-4xl font-extrabold uppercase text-zinc-400 mt-2">
+                  4 Jam <span className="text-xs font-sans text-zinc-500">Downtime</span>
+                </p>
+                <p className="text-xs font-sans text-zinc-500 mt-2">Setiap pembaruan membutuhkan jendela henti layanan.</p>
+              </div>
+            </div>
+
+            {/* Bottom Status Callout */}
+            <div className="pt-4 border-t border-white/10 flex items-center justify-between text-xs text-zinc-500 font-mono">
+              <span>◄ SISTEM SEBELUM TRANSFORMASI</span>
+              <span className="hidden sm:inline">GULIR KE BAWAH UNTUK MELIHAT HASIL ARSITEKTUR INTELECTA ►</span>
+            </div>
+          </div>
+
+          {/* --------------------------------------------------------------------- */}
+          {/* PANEL B: AFTER (ARSITEKTUR INTELECTA CLOUD-NATIVE HIGH AVAILABILITY) */}
+          {/* --------------------------------------------------------------------- */}
+          <div
+            ref={afterPanelRef}
+            style={{ clipPath: "inset(0% 0% 0% 100%)" }}
+            className="absolute inset-0 w-full h-full bg-[#020203] px-6 sm:px-12 lg:px-16 py-8 sm:py-12 flex flex-col justify-between border-l border-white/20 shadow-[-20px_0_40px_rgba(0,0,0,0.8)]"
+          >
+            {/* Top Narrative Row */}
+            <div className="max-w-4xl">
+              <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-[11px] font-mono text-emerald-400">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                <span>HASIL REKAYASA // STANDAR ENTERPRISE 99.99%</span>
+              </div>
+              <h3 className="mt-3 font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold uppercase tracking-tight text-white leading-tight">
+                Arsitektur Terdistribusi Cloud-Native
+              </h3>
+              <p className="mt-3 font-sans text-sm sm:text-base text-zinc-300 leading-relaxed max-w-2xl">
+                Microservices berbasis Go & Rust dengan akselerasi I/O kernel bypass, replikasi konsensus multi-region aktif, dan skalabilitas pod otonom dalam &lt; 15 detik.
+              </p>
+            </div>
+
+            {/* 4 Transformative Enterprise Metrics Grid */}
+            <div className="my-6 grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+              <div className="rounded-xl border border-white/20 bg-white/[0.04] p-5 shadow-[0_0_20px_rgba(255,255,255,0.03)]">
+                <span className="font-mono text-xs text-zinc-400 uppercase block">01 Latensi P99</span>
+                <p className="font-display text-3xl sm:text-4xl font-black uppercase text-white mt-2 drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]">
+                  &lt; 12 <span className="text-xs font-sans text-zinc-400">ms</span>
+                </p>
+                <p className="text-xs font-sans text-emerald-400 mt-2 font-medium">99% Reduksi latensi sub-milidetik.</p>
+              </div>
+
+              <div className="rounded-xl border border-white/20 bg-white/[0.04] p-5 shadow-[0_0_20px_rgba(255,255,255,0.03)]">
+                <span className="font-mono text-xs text-zinc-400 uppercase block">02 Batas Transaksi</span>
+                <p className="font-display text-3xl sm:text-4xl font-black uppercase text-white mt-2 drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]">
+                  120K <span className="text-xs font-sans text-zinc-400">req/s</span>
+                </p>
+                <p className="text-xs font-sans text-emerald-400 mt-2 font-medium">50x Peningkatan kapasitas transaksi.</p>
+              </div>
+
+              <div className="rounded-xl border border-white/20 bg-white/[0.04] p-5 shadow-[0_0_20px_rgba(255,255,255,0.03)]">
+                <span className="font-mono text-xs text-zinc-400 uppercase block">03 Tingkat Kegagalan</span>
+                <p className="font-display text-3xl sm:text-4xl font-black uppercase text-white mt-2 drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]">
+                  0.001%
+                </p>
+                <p className="text-xs font-sans text-emerald-400 mt-2 font-medium">99.99% SLA Uptime kontraktual terjamin.</p>
+              </div>
+
+              <div className="rounded-xl border border-white/20 bg-white/[0.04] p-5 shadow-[0_0_20px_rgba(255,255,255,0.03)]">
+                <span className="font-mono text-xs text-zinc-400 uppercase block">04 Rilis / Deployment</span>
+                <p className="font-display text-3xl sm:text-4xl font-black uppercase text-white mt-2 drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]">
+                  0 ms <span className="text-xs font-sans text-zinc-400">Downtime</span>
+                </p>
+                <p className="text-xs font-sans text-emerald-400 mt-2 font-medium">Blue-green & canary rollout instan.</p>
+              </div>
+            </div>
+
+            {/* Bottom Status Callout */}
+            <div className="pt-4 border-t border-white/10 flex items-center justify-between text-xs text-zinc-400 font-mono">
+              <span className="text-white font-bold">ARSITEKTUR INTELECTA AKTIF</span>
+              <span>TERVERIFIKASI TELEMETRI KERNEL EBPF</span>
+            </div>
+          </div>
+
+          {/* ===================================================================== */}
+          {/* SCRUBBED ON-SCROLL DIVIDER LINE & TACTILE DRAG HANDLE                */}
+          {/* ===================================================================== */}
+          <div
+            ref={dividerLineRef}
+            style={{ left: "0%" }}
+            className="absolute top-0 bottom-0 w-[2px] bg-white z-30 pointer-events-none shadow-[0_0_20px_#ffffff]"
+          >
+            {/* Center Diamond Pill Handle */}
+            <div
+              onMouseDown={handleMouseDown}
+              className="pointer-events-auto absolute top-1/2 -translate-y-1/2 -translate-x-1/2 flex items-center gap-2 rounded-full border border-white/40 bg-black/90 px-3.5 py-1.5 backdrop-blur-xl shadow-[0_0_25px_rgba(255,255,255,0.4)] cursor-ew-resize hover:scale-105 active:scale-95 transition-transform"
             >
-              {/* ----------------------------------------------------------------- */}
-              {/* PANEL 01: SISTEM LEGACY KONVENSIONAL                              */}
-              {/* ----------------------------------------------------------------- */}
-              {activePanelIndex === 0 && (
-                <div className="max-w-6xl mx-auto w-full h-full flex flex-col justify-between">
-                  {/* Top Narrative Row */}
-                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start border-b border-white/10 pb-8">
-                    <div className="lg:col-span-7">
-                      <span className="text-xs uppercase tracking-widest text-zinc-400">
-                        Kondisi Awal Perusahaan
-                      </span>
-                      <h3 className="mt-2 font-serif text-3xl sm:text-5xl text-white font-normal leading-tight">
-                        Sistem Monolitik Konvensional
-                      </h3>
-                      <p className="mt-4 font-sans text-sm sm:text-base text-zinc-400 leading-relaxed max-w-xl">
-                        Ketergantungan pada single point of failure dan database lock contention yang menyebabkan antrean I/O blocking saat transaksi puncak.
-                      </p>
-                    </div>
-
-                    {/* Single Big Visual Statement Number */}
-                    <div className="lg:col-span-5 flex flex-col justify-end lg:items-end">
-                      <span className="text-xs text-zinc-400 uppercase tracking-wider">
-                        Latency Respon P99
-                      </span>
-                      <p className="font-serif text-5xl sm:text-6xl lg:text-7xl font-light text-zinc-100 mt-1 tracking-tight">
-                        450 – 1,200 <span className="text-2xl text-zinc-400 font-sans">ms</span>
-                      </p>
-                      <p className="text-xs text-zinc-400 mt-2 text-left lg:text-right max-w-xs">
-                        Tingkat penurunan transaksi mencapai 8.5% selama jam sibuk akibat bottleneck antrean.
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Specs Columns */}
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 my-auto pt-6">
-                    <div className="border-l border-white/15 pl-5">
-                      <span className="text-xs text-zinc-400 uppercase tracking-wider">
-                        Pemulihan Bencana (DR)
-                      </span>
-                      <p className="font-serif text-3xl sm:text-4xl text-white mt-1">
-                        4 – 8 Jam
-                      </p>
-                      <p className="text-xs text-zinc-400 mt-2 leading-relaxed">
-                        Failover manual oleh tim IT dengan risiko RPO &gt; 60 menit dan kehilangan data historis.
-                      </p>
-                    </div>
-
-                    <div className="border-l border-white/15 pl-5">
-                      <span className="text-xs text-zinc-400 uppercase tracking-wider">
-                        Batas Kapasitas Transaksi
-                      </span>
-                      <p className="font-serif text-3xl sm:text-4xl text-white mt-1">
-                        2,400 <span className="text-sm font-sans text-zinc-400">req/s</span>
-                      </p>
-                      <p className="text-xs text-zinc-400 mt-2 leading-relaxed">
-                        Kapasitas server statis tak mampu mengimbangi lonjakan trafik saat periode promosi.
-                      </p>
-                    </div>
-
-                    <div className="border-l border-white/15 pl-5">
-                      <span className="text-xs text-zinc-400 uppercase tracking-wider">
-                        Tingkat Kegagalan (Error Rate)
-                      </span>
-                      <p className="font-serif text-3xl sm:text-4xl text-white mt-1">
-                        4.82%
-                      </p>
-                      <p className="text-xs text-zinc-400 mt-2 leading-relaxed">
-                        Single Availability Zone tanpa redundansi aktif antar kawasan data center.
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Editorial Footer Line */}
-                  <div className="pt-4 border-t border-white/10 flex items-center justify-between text-xs text-zinc-400 font-sans">
-                    <span>STATUS: AUDIT SELESAI</span>
-                    <span className="hidden sm:inline text-zinc-400">
-                      Gunakan tab di atas atau scroll untuk meninjau proses rekayasa ulang
-                    </span>
-                  </div>
-                </div>
-              )}
-
-              {/* ----------------------------------------------------------------- */}
-              {/* PANEL 02: PROSES RE-ENGINEERING & ENGINE MIGRASI                  */}
-              {/* ----------------------------------------------------------------- */}
-              {activePanelIndex === 1 && (
-                <div className="max-w-6xl mx-auto w-full h-full flex flex-col justify-between">
-                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start border-b border-white/10 pb-8">
-                    <div className="lg:col-span-7">
-                      <span className="text-xs uppercase tracking-widest text-zinc-400">
-                        Modernisasi Terstruktur
-                      </span>
-                      <h3 className="mt-2 font-serif text-3xl sm:text-5xl text-white font-normal leading-tight">
-                        Proses Rekayasa Ulang
-                      </h3>
-                      <p className="mt-4 font-sans text-sm sm:text-base text-zinc-400 leading-relaxed max-w-xl">
-                        Dekomposisi monolit menjadi microservices berbasis Go & Rust dengan optimasi memori tingkat kernel tanpa menghentikan layanan yang berjalan.
-                      </p>
-                    </div>
-
-                    <div className="lg:col-span-5 flex flex-col justify-end lg:items-end">
-                      <span className="text-xs text-zinc-400 uppercase tracking-wider">
-                        Reduksi Overhead CPU
-                      </span>
-                      <p className="font-serif text-5xl sm:text-6xl lg:text-7xl font-light text-zinc-100 mt-1 tracking-tight">
-                        -70%
-                      </p>
-                      <p className="text-xs text-zinc-400 mt-2 text-left lg:text-right max-w-xs">
-                        Pengurangan konsumsi komputasi melalui kernel-bypass networking dan eBPF telemetry.
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* 3 Pillars */}
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 my-auto pt-6">
-                    <div className="border-l border-white/15 pl-5">
-                      <span className="text-xs text-zinc-400 uppercase tracking-wider">
-                        01 / Jaringan Berkecepatan Tinggi
-                      </span>
-                      <h4 className="font-sans text-lg font-semibold text-white mt-1">
-                        Kernel-Bypass IO
-                      </h4>
-                      <p className="text-xs text-zinc-400 mt-2 leading-relaxed">
-                        Menggantikan stack IO konvensional dengan pipeline komputasi tinggi tanpa context switching.
-                      </p>
-                    </div>
-
-                    <div className="border-l border-white/15 pl-5">
-                      <span className="text-xs text-zinc-400 uppercase tracking-wider">
-                        02 / Sinkronisasi Data
-                      </span>
-                      <h4 className="font-sans text-lg font-semibold text-white mt-1">
-                        Active Quorum Multi-Region
-                      </h4>
-                      <p className="text-xs text-zinc-400 mt-2 leading-relaxed">
-                        Replikasi konsisten lintas data center dengan konsensus Raft terdistribusi tanpa latensi tambahan.
-                      </p>
-                    </div>
-
-                    <div className="border-l border-white/15 pl-5">
-                      <span className="text-xs text-zinc-400 uppercase tracking-wider">
-                        03 / Skala Otomatis
-                      </span>
-                      <h4 className="font-sans text-lg font-semibold text-white mt-1">
-                        Autonomous Autoscaling
-                      </h4>
-                      <p className="text-xs text-zinc-400 mt-2 leading-relaxed">
-                        Horizontal Pod Autoscaler reaktif menyesuaikan kapasitas komputasi dalam kurun waktu &lt; 15 detik.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="pt-4 border-t border-white/10 flex items-center justify-between text-xs text-zinc-400 font-sans">
-                    <span>METODOLOGI: BLUE-GREEN ZERO DOWNTIME ROLLOUT</span>
-                    <span className="hidden sm:inline text-zinc-400">
-                      0 byte data hilang selama seluruh proses migrasi
-                    </span>
-                  </div>
-                </div>
-              )}
-
-              {/* ----------------------------------------------------------------- */}
-              {/* PANEL 03: ARSITEKTUR ENTERPRISE INTELECTA                         */}
-              {/* ----------------------------------------------------------------- */}
-              {activePanelIndex === 2 && (
-                <div className="max-w-6xl mx-auto w-full h-full flex flex-col justify-between">
-                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start border-b border-white/10 pb-8">
-                    <div className="lg:col-span-7">
-                      <span className="text-xs uppercase tracking-widest text-zinc-400">
-                        Standar Intelecta
-                      </span>
-                      <h3 className="mt-2 font-serif text-3xl sm:text-5xl text-white font-normal leading-tight">
-                        Arsitektur Modern Kelas Dunia
-                      </h3>
-                      <p className="mt-4 font-sans text-sm sm:text-base text-zinc-400 leading-relaxed max-w-xl">
-                        Ketahanan multi-region aktif dengan SLA ketersediaan 99.99% dan latency sub-milidetik untuk jutaan pengguna simultan.
-                      </p>
-                    </div>
-
-                    <div className="lg:col-span-5 flex flex-col justify-end lg:items-end">
-                      <span className="text-xs text-zinc-400 uppercase tracking-wider">
-                        Latency Respon P99 Teruji
-                      </span>
-                      <p className="font-serif text-5xl sm:text-6xl lg:text-7xl font-light text-white mt-1 tracking-tight">
-                        &lt; 8.4 <span className="text-2xl text-zinc-400 font-sans">ms</span>
-                      </p>
-                      <p className="text-xs text-zinc-400 mt-2 text-left lg:text-right max-w-xs">
-                        Penurunan latensi sebesar 98.6% dibandingkan arsitektur lama secara konsisten.
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Superior Specs */}
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 my-auto pt-6">
-                    <div className="border-l border-white/25 pl-5">
-                      <span className="text-xs text-zinc-400 uppercase tracking-wider">
-                        Failover Otomatis (DR)
-                      </span>
-                      <p className="font-serif text-3xl sm:text-4xl text-white mt-1">
-                        &lt; 850 ms
-                      </p>
-                      <p className="text-xs text-zinc-400 mt-2 leading-relaxed">
-                        Peralihan instan otonom antar zona tanpa campur tangan teknisi manual (RPO = 0).
-                      </p>
-                    </div>
-
-                    <div className="border-l border-white/25 pl-5">
-                      <span className="text-xs text-zinc-400 uppercase tracking-wider">
-                        Kapasitas Skala Beban
-                      </span>
-                      <p className="font-serif text-3xl sm:text-4xl text-white mt-1">
-                        120,000+ <span className="text-sm font-sans text-zinc-400">req/s</span>
-                      </p>
-                      <p className="text-xs text-zinc-400 mt-2 leading-relaxed">
-                        Skalabilitas elastis hingga 1,000+ pod tanpa penurunan stabilitas server.
-                      </p>
-                    </div>
-
-                    <div className="border-l border-white/25 pl-5">
-                      <span className="text-xs text-zinc-400 uppercase tracking-wider">
-                        Keandalan Bergaransi
-                      </span>
-                      <p className="font-serif text-3xl sm:text-4xl text-white mt-1">
-                        99.99%
-                      </p>
-                      <p className="text-xs text-zinc-400 mt-2 leading-relaxed">
-                        Tingkat error produksi ditekan hingga 0.001% dengan kepatuhan penuh standar ISO 27001.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="pt-4 border-t border-white/10 flex items-center justify-between text-xs text-zinc-400 font-sans">
-                    <span>SLA: 99.99% CONTRACTUAL GUARANTEE</span>
-                    <span className="hidden sm:inline text-zinc-400">
-                      Terverifikasi pada sistem skala perbankan dan enterprise
-                    </span>
-                  </div>
-                </div>
-              )}
-
-              {/* ----------------------------------------------------------------- */}
-              {/* PANEL 04: MATRIKS DAMPAK BISNIS LENGKAP                           */}
-              {/* ----------------------------------------------------------------- */}
-              {activePanelIndex === 3 && (
-                <div className="max-w-6xl mx-auto w-full h-full flex flex-col justify-between">
-                  <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 border-b border-white/10 pb-8">
-                    <div>
-                      <span className="text-xs uppercase tracking-widest text-zinc-400">
-                        Hasil Terukur
-                      </span>
-                      <h3 className="mt-2 font-serif text-3xl sm:text-5xl text-white font-normal leading-tight">
-                        Matriks Dampak Transformasi
-                      </h3>
-                      <p className="mt-2 font-sans text-sm text-zinc-400">
-                        Perbandingan langsung indikator kunci sebelum dan sesudah implementasi arsitektur Intelecta
-                      </p>
-                    </div>
-
-                    <button
-                      onClick={() => {
-                        const el = document.getElementById("kontak");
-                        el?.scrollIntoView({ behavior: "smooth" });
-                      }}
-                      className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-2.5 text-xs font-semibold text-black transition-all hover:bg-zinc-200 shrink-0"
-                    >
-                      <span>Konsultasi Arsitektur</span>
-                      <GlyphArrowUpRight className="h-3.5 w-3.5" />
-                    </button>
-                  </div>
-
-                  {/* Clean Editorial Comparison Table */}
-                  <div className="my-auto divide-y divide-white/10">
-                    {[
-                      {
-                        param: "Latency Respon (P99)",
-                        before: "450 – 1,200 ms",
-                        after: "< 8.4 ms",
-                        delta: "98.6% Lebih Cepat",
-                      },
-                      {
-                        param: "Disaster Recovery Failover",
-                        before: "4 – 8 Jam (Manual)",
-                        after: "< 850 ms (Otonom)",
-                        delta: "99.9% Reduksi Waktu",
-                      },
-                      {
-                        param: "Throughput Beban Puncak",
-                        before: "2,400 req/sec",
-                        after: "120,000 req/sec",
-                        delta: "50x Lipat Kapasitas",
-                      },
-                      {
-                        param: "Tingkat Error Produksi",
-                        before: "4.82% (High Timeout)",
-                        after: "0.001% (Sub-ppm)",
-                        delta: "Stabilitas Sempurna",
-                      },
-                      {
-                        param: "Siklus Deployment",
-                        before: "Bulanan (High Risk)",
-                        after: "Harian (Zero Downtime)",
-                        delta: "100% CI/CD Otomatis",
-                      },
-                    ].map((row, idx) => (
-                      <div
-                        key={row.param}
-                        className="py-3.5 grid grid-cols-1 sm:grid-cols-12 items-center gap-2 sm:gap-4 font-sans text-xs sm:text-sm"
-                      >
-                        <div className="sm:col-span-5 font-medium text-white flex items-center gap-3">
-                          <span className="text-zinc-400 font-mono text-xs">0{idx + 1}</span>
-                          <span>{row.param}</span>
-                        </div>
-                        <div className="sm:col-span-3 text-zinc-400">
-                          <span className="sm:hidden text-zinc-400 text-xs">Sebelum: </span>
-                          {row.before}
-                        </div>
-                        <div className="sm:col-span-2 text-white font-medium">
-                          <span className="sm:hidden text-zinc-400 text-xs">Sesudah: </span>
-                          {row.after}
-                        </div>
-                        <div className="sm:col-span-2 text-right">
-                          <span className="inline-block rounded-full bg-white/10 px-2.5 py-0.5 text-xs text-white">
-                            {row.delta}
-                          </span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="pt-4 border-t border-white/10 flex items-center justify-between text-xs text-zinc-400 font-sans">
-                    <span>INTELECTA BENCHMARK STANDARD</span>
-                    <span>STANDAR ARSITEKTUR KELAS DUNIA</span>
-                  </div>
-                </div>
-              )}
-            </PanelTransition>
-          </AnimatePresence>
+              <span className="font-mono text-[10px] text-zinc-400 font-semibold tracking-wider">
+                BEFORE
+              </span>
+              <div className="h-2 w-2 rotate-45 border border-white bg-white shadow-[0_0_8px_#ffffff]" />
+              <span className="font-mono text-[10px] text-white font-bold tracking-wider">
+                AFTER
+              </span>
+            </div>
+          </div>
         </div>
 
         {/* ========================================================================= */}
-        {/* BOTTOM HUD BAR: Minimalist Step Counter & Subtle Progress Indicator       */}
+        {/* BOTTOM PROGRESS TRACKER BAR                                               */}
         {/* ========================================================================= */}
-        <footer className="relative z-30 w-full px-6 sm:px-12 lg:px-16 py-4 border-t border-white/10 backdrop-blur-md bg-black/40 flex items-center justify-between">
-          <div className="flex items-center gap-3 font-sans text-xs text-zinc-400">
-            <span>Scroll vertikal atau klik tab untuk beralih antar babak</span>
+        <footer className="relative z-40 w-full px-6 sm:px-12 lg:px-16 py-3.5 border-t border-white/10 flex items-center justify-between text-[11px] font-mono text-zinc-400 bg-black/60 backdrop-blur-md">
+          <span className="flex items-center gap-2">
+            <span className="h-1 w-1 rounded-full bg-white animate-ping" />
+            <span>TRANSISI ON-SCROLL: {Math.round(splitPercent)}% SELESAI</span>
+          </span>
+          <div className="w-48 sm:w-64 h-1 bg-white/10 rounded-full overflow-hidden">
+            <div
+              style={{ width: `${splitPercent}%` }}
+              className="h-full bg-white shadow-[0_0_10px_#ffffff] transition-all duration-75"
+            />
           </div>
-
-          <div className="flex items-center gap-4">
-            <div className="font-mono text-xs text-zinc-400 flex items-center gap-1.5">
-              <span className="text-white font-bold">0{activePanelIndex + 1}</span>
-              <span className="text-zinc-600">/</span>
-              <span>04</span>
-            </div>
-
-            {/* Subtle Progress Bar */}
-            <div className="w-24 sm:w-36 h-1 rounded-full bg-white/10 overflow-hidden">
-              <div
-                className="h-full bg-white transition-all duration-300"
-                style={{ width: `${((activePanelIndex + 1) / 4) * 100}%` }}
-              />
-            </div>
-          </div>
+          <span className="hidden sm:inline text-zinc-500">
+            GESER SLIDER ATAU GULIR UNTUK MEMBANDINGKAN
+          </span>
         </footer>
-
       </div>
     </div>
   );
