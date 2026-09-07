@@ -84,32 +84,32 @@ export default function Home() {
       </div>
 
       {/* 01 / HERO & SIGNAL (Monumental Layered Animated 3D Logo) */}
-      <CurtainSection id="beranda-curtain" zIndex={10} enablePin={true}>
+      <CurtainSection id="beranda-curtain" zIndex={10} enablePin={true} sectionIndex="01" sectionLabel="signal">
         <HeroSection onOpenConsultation={() => setIsConsultationOpen(true)} />
       </CurtainSection>
 
-      {/* 02 / PENGENALAN & 3D LOGO SHOWCASE (Intelecta 3D Logo Trio) */}
-      <CurtainSection id="showcase-3d-curtain" zIndex={20} enablePin={true}>
+      {/* 02 / PENGENALAN & IDENTITAS INTELECTA */}
+      <CurtainSection id="showcase-3d-curtain" zIndex={20} enablePin={true} sectionIndex="02" sectionLabel="identitas studio">
         <Lab3DSection />
       </CurtainSection>
 
       {/* 03 / KAPABILITAS SISTEM (Services Matrix - United Carriers Format) */}
-      <CurtainSection id="layanan-curtain" zIndex={30} enablePin={true}>
+      <CurtainSection id="layanan-curtain" zIndex={30} enablePin={true} sectionIndex="03" sectionLabel="kapabilitas sistem">
         <ServicesMatrix />
       </CurtainSection>
 
       {/* 04 / BENCHMARK TRANSFORMASI (Before / After Horizontal On-Scroll Transition) */}
-      <CurtainSection id="transformasi-curtain" zIndex={35} enablePin={false} className="overflow-visible min-h-[250vh]">
+      <CurtainSection id="transformasi-curtain" zIndex={35} enablePin={false} sectionIndex="04" sectionLabel="benchmark transformasi" className="overflow-visible min-h-[250vh]">
         <BeforeAfterCompare />
       </CurtainSection>
 
       {/* 05 / PONDASI ARSITEKTUR (3-Column Pillar Scrollytelling + Grand Right Logo) */}
-      <CurtainSection id="keunggulan-curtain" zIndex={40} enablePin={true}>
+      <CurtainSection id="keunggulan-curtain" zIndex={40} enablePin={true} sectionIndex="05" sectionLabel="pondasi arsitektur">
         <WhyIntelecta />
       </CurtainSection>
 
       {/* 06 / INISIASI & KONTAK (Contact Form & Interactive Architecture Console) */}
-      <CurtainSection id="kontak-curtain" zIndex={50} enablePin={false}>
+      <CurtainSection id="kontak-curtain" zIndex={50} enablePin={false} sectionIndex="06" sectionLabel="inisiasi sistem">
         <ContactSection />
       </CurtainSection>
 

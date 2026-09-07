@@ -91,12 +91,6 @@ export const DiamondScene: React.FC = () => {
       onPointerMove={handlePointerMove}
       className="relative h-[380px] w-[380px] sm:h-[480px] sm:w-[480px] lg:h-[540px] lg:w-[540px]"
     >
-      {/* Ambient Upward Light Cone (Volumetric Beam Effect) */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 -bottom-10 flex justify-center">
-        <div className="h-full w-48 bg-gradient-to-t from-transparent via-white/10 to-white/40 blur-2xl opacity-70 animate-beam-up" />
-        <div className="absolute top-0 h-3/4 w-1 bg-gradient-to-b from-transparent via-white/60 to-white/10 blur-[1px]" />
-      </div>
-
       {/* 3D Canvas */}
       <Canvas
         camera={{ position: [0, 0, 6], fov: 45 }}

@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Syne, Plus_Jakarta_Sans, IBM_Plex_Mono, Newsreader } from "next/font/google";
+import { Syne, Plus_Jakarta_Sans, IBM_Plex_Mono } from "next/font/google";
 import "@/styles/globals.css";
 import { SmoothScroll } from "@/components/layout/SmoothScroll";
 import { CustomCursor } from "@/components/ui/CustomCursor";
@@ -26,14 +26,6 @@ const ibmPlexMono = IBM_Plex_Mono({
   variable: "--font-ibm-plex-mono",
   display: "swap",
   weight: ["400", "500", "600"],
-});
-
-const newsreader = Newsreader({
-  subsets: ["latin"],
-  variable: "--font-newsreader",
-  display: "swap",
-  weight: ["400", "500", "600", "700"],
-  style: ["normal", "italic"],
 });
 
 export const viewport: Viewport = {
@@ -99,7 +91,7 @@ export default function RootLayout({
     <html
       lang="id"
       dir="ltr"
-      className={`${syne.variable} ${plusJakarta.variable} ${ibmPlexMono.variable} ${newsreader.variable}`}
+      className={`${syne.variable} ${plusJakarta.variable} ${ibmPlexMono.variable}`}
     >
       <body className="bg-[#030303] text-white font-sans antialiased selection:bg-white selection:text-black">
         <SmoothScroll>

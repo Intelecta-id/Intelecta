@@ -37,7 +37,6 @@ const config: Config = {
       fontFamily: {
         sans: ["var(--font-plus-jakarta)", "sans-serif"],
         display: ["var(--font-syne)", "sans-serif"],
-        serif: ["var(--font-newsreader)", "serif"],
         mono: ["var(--font-ibm-plex-mono)", "monospace"],
       },
       borderRadius: {

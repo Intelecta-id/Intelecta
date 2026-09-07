@@ -282,7 +282,7 @@ export const WhyIntelecta: React.FC = () => {
           <span className="font-sans text-xs tracking-widest text-zinc-400 uppercase">
             Pondasi Arsitektur Korporat
           </span>
-          <h2 className="mt-3 font-serif text-3xl sm:text-4xl lg:text-5xl text-white font-normal leading-tight">
+          <h2 className="mt-3 font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold uppercase tracking-tight text-white leading-tight">
             4 Pilar Fundamental Intelecta
           </h2>
           <p className="mt-4 font-sans text-base text-zinc-400 leading-relaxed max-w-2xl">
@@ -334,7 +334,7 @@ export const WhyIntelecta: React.FC = () => {
                     <span className="font-sans text-xs tracking-widest text-zinc-400 uppercase">
                       Pilar 0{activePillar + 1}
                     </span>
-                    <h3 className="mt-2 font-serif text-3xl sm:text-4xl text-white font-normal">
+                    <h3 className="mt-2 font-display text-2xl sm:text-3xl lg:text-4xl font-extrabold uppercase tracking-tight text-white">
                       {currentPillar.title}
                     </h3>
                     <p className="mt-3 font-sans text-base text-zinc-300 font-medium leading-relaxed">
@@ -372,7 +372,7 @@ export const WhyIntelecta: React.FC = () => {
                       Tolok Ukur Kinerja Utama
                     </span>
                     <div className="mt-3 flex items-baseline gap-2">
-                      <span className="font-serif text-5xl sm:text-6xl lg:text-7xl font-light text-white tracking-tight">
+                      <span className="font-display text-5xl sm:text-6xl lg:text-7xl font-black uppercase text-white tracking-tight">
                         {currentPillar.metric}
                       </span>
                       {currentPillar.metricUnit && (

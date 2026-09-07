@@ -14,8 +14,9 @@ export const CustomCursor: React.FC = () => {
   const ringY = useSpring(0, { stiffness: 200, damping: 20 });
 
   useEffect(() => {
-    // Disable on touch devices
-    if (window.matchMedia("(pointer: coarse)").matches) {
+    if (typeof window === "undefined") return;
+    // Disable on touch devices or small screens
+    if (window.matchMedia("(pointer: coarse)").matches || window.innerWidth < 768) {
       return;
     }
 

@@ -9,29 +9,44 @@ export const Preloader: React.FC = () => {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    // Check session storage to only show preloader once per session
-    const hasLoaded = sessionStorage.getItem("intelecta_preloaded");
-    if (hasLoaded) {
-      setLoading(false);
-      return;
+    if (typeof window === "undefined") return;
+
+    try {
+      const hasLoaded = sessionStorage.getItem("intelecta_preloaded");
+      if (hasLoaded) {
+        setLoading(false);
+        return;
+      }
+    } catch {
+      // Ignore storage errors in restricted contexts
     }
 
+    // Quick, non-blocking initial progress reveal
     const interval = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) {
           clearInterval(interval);
           setTimeout(() => {
             setLoading(false);
-            sessionStorage.setItem("intelecta_preloaded", "true");
-          }, 400);
+            try {
+              sessionStorage.setItem("intelecta_preloaded", "true");
+            } catch {}
+          }, 150);
           return 100;
         }
-        const increment = Math.floor(Math.random() * 15) + 5;
-        return Math.min(prev + increment, 100);
+        return prev + 25;
       });
-    }, 80);
+    }, 25);
 
-    return () => clearInterval(interval);
+    // Hard fallback timeout to guarantee page reveals
+    const fallbackTimeout = setTimeout(() => {
+      setLoading(false);
+    }, 450);
+
+    return () => {
+      clearInterval(interval);
+      clearTimeout(fallbackTimeout);
+    };
   }, []);
 
   return (
@@ -42,17 +57,17 @@ export const Preloader: React.FC = () => {
           initial={{ opacity: 1 }}
           exit={{
             opacity: 0,
-            y: -30,
-            transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1] },
+            y: -20,
+            transition: { duration: 0.4, ease: [0.76, 0, 0.24, 1] },
           }}
-          className="fixed inset-0 z-[99999] flex flex-col items-center justify-center bg-[#030303] text-white"
+          className="fixed inset-0 z-[99999] flex flex-col items-center justify-center bg-[#030303] text-white pointer-events-none"
         >
           {/* Logo Animation */}
-          <div className="relative mb-8 h-32 w-32">
+          <div className="relative mb-8 h-28 w-28">
             <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
+              initial={{ scale: 0.85, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.6, ease: "easeOut" }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
               className="relative h-full w-full"
             >
               <Image
@@ -65,16 +80,16 @@ export const Preloader: React.FC = () => {
             </motion.div>
           </div>
 
-          {/* Typography */}
+          {/* Typography - Changed to span for SEO single H1 standard */}
           <motion.div
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 0.5 }}
+            transition={{ delay: 0.1, duration: 0.3 }}
             className="mb-8 text-center"
           >
-            <h1 className="font-display text-lg tracking-[0.3em] font-bold text-white">
+            <span className="block font-display text-lg tracking-[0.3em] font-bold text-white">
               INTELECTA
-            </h1>
+            </span>
             <p className="mt-1 font-mono text-xs tracking-widest text-zinc-500">
               NEXT-GEN ENTERPRISE ARCHITECTURE
             </p>
@@ -90,7 +105,7 @@ export const Preloader: React.FC = () => {
               />
             </div>
             <div className="mt-3 flex justify-between font-mono text-[11px] text-zinc-400">
-              <span>SYSTEM INITIALIZING</span>
+              <span>INITIALIZING</span>
               <span>{progress}%</span>
             </div>
           </div>
