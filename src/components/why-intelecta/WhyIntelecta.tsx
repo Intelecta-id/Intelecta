@@ -153,7 +153,7 @@ export const WhyIntelecta: React.FC = () => {
         },
         {
           strokeDashoffset: 0,
-          opacity: 0.7,
+          opacity: 0.6,
           scale: 1,
           duration: 1.4,
           ease: "power3.out",
@@ -170,7 +170,7 @@ export const WhyIntelecta: React.FC = () => {
           },
           {
             strokeDashoffset: 0,
-            opacity: 0.6,
+            opacity: 0.5,
             scale: 1,
             duration: 1.2,
             ease: "power3.out",
@@ -195,8 +195,7 @@ export const WhyIntelecta: React.FC = () => {
 
       // Subtle breathing motion
       gsap.to(logoSvgRef.current, {
-        y: -10,
-        rotation: 0.8,
+        y: -8,
         duration: 5,
         repeat: -1,
         yoyo: true,
@@ -219,78 +218,57 @@ export const WhyIntelecta: React.FC = () => {
     <section
       ref={sectionRef}
       id="keunggulan"
-      className="relative min-h-screen py-24 sm:py-32 bg-[#030303] overflow-hidden border-t border-white/10 flex items-center"
+      className="relative min-h-screen py-24 sm:py-32 bg-black overflow-hidden border-t border-white/10 flex items-center select-none"
     >
-      {/* Monumental Watermark Logo on Right Edge */}
-      <div className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/3 sm:translate-x-1/4 lg:translate-x-1/6 w-[500px] sm:w-[700px] md:w-[850px] lg:w-[1050px] h-[700px] sm:h-[900px] lg:h-[1100px] z-0 opacity-40 select-none">
+      {/* Monumental Watermark Logo on Right Edge (Solid Strokes, No Gradients) */}
+      <div className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/3 sm:translate-x-1/4 lg:translate-x-1/6 w-[500px] sm:w-[700px] md:w-[850px] lg:w-[1050px] h-[700px] sm:h-[900px] lg:h-[1100px] z-0 opacity-30 select-none">
         <svg
           ref={logoSvgRef}
           viewBox="0 0 1000 1000"
           className="w-full h-full"
           fill="none"
         >
-          <defs>
-            <linearGradient id="whyOuterGrad" x1="200" y1="100" x2="800" y2="900" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.8" />
-              <stop offset="50%" stopColor="#71717A" stopOpacity="0.4" />
-              <stop offset="100%" stopColor="#18181B" stopOpacity="0.1" />
-            </linearGradient>
-            <linearGradient id="whyMidGrad" x1="300" y1="200" x2="700" y2="800" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.7" />
-              <stop offset="100%" stopColor="#52525B" stopOpacity="0.2" />
-            </linearGradient>
-          </defs>
-
+          {/* Outer Rhombus (Solid stroke) */}
           <polygon
             ref={outerPathRef}
             points="500,50 950,500 500,950 50,500"
-            stroke="url(#whyOuterGrad)"
-            strokeWidth="24"
+            stroke="rgba(255,255,255,0.3)"
+            strokeWidth="22"
             strokeLinejoin="miter"
             strokeMiterlimit="10"
           />
 
+          {/* Hairline Contour */}
           <polygon
             points="500,18 982,500 500,982 18,500"
-            stroke="rgba(255,255,255,0.15)"
+            stroke="rgba(255,255,255,0.12)"
             strokeWidth="2"
             strokeDasharray="16 12"
           />
 
+          {/* Mid Rhombus (Solid stroke) */}
           <polygon
             ref={midPathRef}
             points="500,200 800,500 500,800 200,500"
-            stroke="url(#whyMidGrad)"
-            strokeWidth="16"
+            stroke="rgba(255,255,255,0.25)"
+            strokeWidth="14"
             strokeLinejoin="miter"
             strokeMiterlimit="10"
           />
 
+          {/* Core Rhombus */}
           <polygon
             ref={corePathRef}
             points="500,350 650,500 500,650 350,500"
-            stroke="rgba(255,255,255,0.6)"
+            stroke="rgba(255,255,255,0.5)"
             strokeWidth="4"
           />
         </svg>
       </div>
 
       <div className="mx-auto max-w-7xl px-6 sm:px-10 lg:px-12 w-full relative z-10">
-        
-        {/* Editorial Section Header */}
-        <div className="max-w-3xl border-b border-white/10 pb-8">
-          <span className="font-sans text-xs tracking-widest text-zinc-400 uppercase">
-            Pondasi Arsitektur Korporat
-          </span>
-          <h2 className="mt-3 font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold uppercase tracking-tight text-white leading-tight">
-            4 Pilar Fundamental Intelecta
-          </h2>
-          <p className="mt-4 font-sans text-base text-zinc-400 leading-relaxed max-w-2xl">
-            Prinsip rekayasa tanpa kompromi untuk memastikan setiap infrastruktur siap menghadapi beban jutaan transaksi dan ancaman siber modern.
-          </p>
-        </div>
 
-        {/* Minimalist Tactile Pillar Switcher Tabs */}
+        {/* Minimalist Tactile Pillar Switcher Tabs (Sharp Boxes) */}
         <div className="mt-8 flex flex-wrap gap-2">
           {pillars.map((pillar, idx) => {
             const isActive = activePillar === idx;
@@ -299,13 +277,18 @@ export const WhyIntelecta: React.FC = () => {
                 key={pillar.id}
                 onClick={() => handlePillarChange(idx)}
                 className={cn(
-                  "px-4 py-2.5 rounded-full text-xs font-medium transition-all duration-300 flex items-center gap-2.5 border",
+                  "relative px-4 py-2.5 text-xs font-mono uppercase tracking-wider transition-colors border flex items-center gap-2.5",
                   isActive
-                    ? "bg-white text-black font-semibold border-white shadow-[0_0_20px_rgba(255,255,255,0.25)]"
-                    : "bg-white/[0.03] border-white/10 text-zinc-400 hover:border-white/25 hover:text-white"
+                    ? "bg-white text-black font-bold border-white"
+                    : "bg-[#08080a] border-white/15 text-zinc-400 hover:border-white/30 hover:text-white"
                 )}
               >
-                <span className={cn("text-[10px] font-mono", isActive ? "text-zinc-600" : "text-zinc-500")}>
+                <span className={cn("corner-tl !w-1 !h-1", isActive ? "!border-black" : "")} />
+                <span className={cn("corner-tr !w-1 !h-1", isActive ? "!border-black" : "")} />
+                <span className={cn("corner-bl !w-1 !h-1", isActive ? "!border-black" : "")} />
+                <span className={cn("corner-br !w-1 !h-1", isActive ? "!border-black" : "")} />
+
+                <span className={cn("text-[10px] font-mono", isActive ? "text-zinc-700" : "text-zinc-500")}>
                   {pillar.num}
                 </span>
                 <span>{pillar.title}</span>
@@ -315,24 +298,28 @@ export const WhyIntelecta: React.FC = () => {
         </div>
 
         {/* ========================================================================= */}
-        {/* CENTER STAGE: ZERO-BLEED CIRCULAR REVEAL PANEL TRANSITION                 */}
+        {/* CENTER STAGE: STRIP REVEAL PANEL TRANSITION (Sharp Box Container)         */}
         {/* ========================================================================= */}
-        <div className="mt-10 relative min-h-[440px] sm:min-h-[400px] w-full overflow-hidden rounded-2xl border border-white/10 bg-[#08080C]/80 backdrop-blur-xl p-8 sm:p-12">
+        <div className="relative mt-8 min-h-[440px] sm:min-h-[400px] w-full overflow-hidden border border-white/20 bg-[#070709] p-8 sm:p-12">
+          <span className="corner-tl" />
+          <span className="corner-tr" />
+          <span className="corner-bl" />
+          <span className="corner-br" />
+
           <AnimatePresence mode="popLayout" custom={direction}>
             <PanelTransition
               key={currentPillar.id}
               activeKey={currentPillar.id}
-              variant="circular"
+              variant="strip"
               direction={direction}
               className="p-0 relative"
             >
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start h-full">
-                
                 {/* Left Editorial Narrative (7 Columns) */}
                 <div className="lg:col-span-7 flex flex-col justify-between h-full">
                   <div>
-                    <span className="font-sans text-xs tracking-widest text-zinc-400 uppercase">
-                      Pilar 0{activePillar + 1}
+                    <span className="font-mono text-xs tracking-widest text-zinc-400 uppercase">
+                      PILAR 0{activePillar + 1}
                     </span>
                     <h3 className="mt-2 font-display text-2xl sm:text-3xl lg:text-4xl font-extrabold uppercase tracking-tight text-white">
                       {currentPillar.title}
@@ -349,7 +336,7 @@ export const WhyIntelecta: React.FC = () => {
                   <div className="mt-8 space-y-4 pt-6 border-t border-white/10">
                     {currentPillar.principles.map((pr, i) => (
                       <div key={pr.label} className="flex items-start gap-3">
-                        <span className="font-mono text-xs text-zinc-400 font-bold shrink-0 mt-0.5">
+                        <span className="font-mono text-xs text-zinc-500 font-bold shrink-0 mt-0.5">
                           0{i + 1}
                         </span>
                         <div>
@@ -367,8 +354,13 @@ export const WhyIntelecta: React.FC = () => {
 
                 {/* Right Monumental KPI Display (5 Columns) */}
                 <div className="lg:col-span-5 flex flex-col justify-between h-full lg:border-l lg:border-white/10 lg:pl-10">
-                  <div className="p-6 rounded-xl bg-white/[0.02] border border-white/8">
-                    <span className="font-sans text-xs text-zinc-400 uppercase tracking-wider">
+                  <div className="relative p-6 bg-[#0a0a0d] border border-white/15">
+                    <span className="corner-tl !w-1 !h-1" />
+                    <span className="corner-tr !w-1 !h-1" />
+                    <span className="corner-bl !w-1 !h-1" />
+                    <span className="corner-br !w-1 !h-1" />
+
+                    <span className="font-mono text-[10px] text-zinc-400 uppercase tracking-widest block">
                       Tolok Ukur Kinerja Utama
                     </span>
                     <div className="mt-3 flex items-baseline gap-2">
@@ -376,34 +368,31 @@ export const WhyIntelecta: React.FC = () => {
                         {currentPillar.metric}
                       </span>
                       {currentPillar.metricUnit && (
-                        <span className="font-sans text-xl text-zinc-400 font-normal">
+                        <span className="font-mono text-xl text-zinc-400 font-normal">
                           {currentPillar.metricUnit}
                         </span>
                       )}
                     </div>
-                    <p className="mt-2 font-sans text-xs text-zinc-300">
+                    <p className="mt-2 font-mono text-xs text-zinc-300">
                       {currentPillar.metricLabel}
                     </p>
                   </div>
 
                   {/* Architectural Standards Footnote */}
-                  <div className="mt-8 pt-6 border-t border-white/10 text-xs font-sans text-zinc-400 space-y-2">
+                  <div className="mt-8 pt-6 border-t border-white/10 text-xs font-mono text-zinc-400 space-y-2">
                     <div className="flex items-center justify-between">
                       <span>STANDAR IMPLEMENTASI</span>
-                      <span className="text-zinc-400">ENTERPRISE GRADE</span>
+                      <span className="text-white font-bold">ENTERPRISE GRADE</span>
                     </div>
-                    <p className="text-[11px] leading-relaxed text-zinc-400">
+                    <p className="text-[11px] leading-relaxed text-zinc-400 font-sans">
                       Setiap parameter diuji melalui automated benchmarking dan monitoring real-time sebelum deployment produksi.
                     </p>
                   </div>
-
                 </div>
-
               </div>
             </PanelTransition>
           </AnimatePresence>
         </div>
-
       </div>
     </section>
   );

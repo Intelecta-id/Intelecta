@@ -9,6 +9,7 @@ interface MagneticButtonProps extends React.ButtonHTMLAttributes<HTMLButtonEleme
   className?: string;
   variant?: "primary" | "secondary" | "ghost";
   onClick?: () => void;
+  showCorners?: boolean;
 }
 
 export const MagneticButton: React.FC<MagneticButtonProps> = ({
@@ -16,6 +17,7 @@ export const MagneticButton: React.FC<MagneticButtonProps> = ({
   className,
   variant = "primary",
   onClick,
+  showCorners = true,
   ...props
 }) => {
   const ref = useRef<HTMLButtonElement>(null);
@@ -27,7 +29,7 @@ export const MagneticButton: React.FC<MagneticButtonProps> = ({
     const { left, top, width, height } = ref.current.getBoundingClientRect();
     const middleX = clientX - (left + width / 2);
     const middleY = clientY - (top + height / 2);
-    setPosition({ x: middleX * 0.3, y: middleY * 0.3 });
+    setPosition({ x: middleX * 0.25, y: middleY * 0.25 });
   };
 
   const handleMouseLeave = () => {
@@ -36,11 +38,11 @@ export const MagneticButton: React.FC<MagneticButtonProps> = ({
 
   const variants = {
     primary:
-      "bg-white text-black font-semibold hover:bg-zinc-200 border border-white shadow-[0_0_30px_rgba(255,255,255,0.25)]",
+      "bg-white text-black font-mono text-xs uppercase tracking-wider font-bold hover:bg-zinc-200 border border-white",
     secondary:
-      "bg-surface/80 text-white font-medium hover:bg-surface-hover border border-white/15 hover:border-white/40 backdrop-blur-md",
+      "bg-[#07070a] text-white font-mono text-xs uppercase tracking-wider hover:bg-white hover:text-black border border-white/20 hover:border-white transition-colors",
     ghost:
-      "bg-transparent text-foreground-secondary hover:text-white border border-transparent hover:border-white/10",
+      "bg-transparent text-zinc-400 font-mono text-xs uppercase tracking-wider hover:text-white border border-transparent hover:border-white/20",
   };
 
   return (
@@ -49,15 +51,23 @@ export const MagneticButton: React.FC<MagneticButtonProps> = ({
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       animate={{ x: position.x, y: position.y }}
-      transition={{ type: "spring", stiffness: 200, damping: 15, mass: 0.1 }}
+      transition={{ type: "spring", stiffness: 220, damping: 18, mass: 0.1 }}
       onClick={onClick}
       className={cn(
-        "group relative inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 text-sm transition-all duration-200 active:scale-95 disabled:pointer-events-none disabled:opacity-50",
+        "group relative inline-flex items-center justify-center gap-2 rounded-none px-6 py-3 transition-colors duration-150 active:scale-95 disabled:pointer-events-none disabled:opacity-50 select-none",
         variants[variant],
         className
       )}
       {...(props as any)}
     >
+      {showCorners && (
+        <>
+          <span className="corner-tl !w-1 !h-1" />
+          <span className="corner-tr !w-1 !h-1" />
+          <span className="corner-bl !w-1 !h-1" />
+          <span className="corner-br !w-1 !h-1" />
+        </>
+      )}
       {children}
     </motion.button>
   );

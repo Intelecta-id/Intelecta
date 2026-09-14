@@ -72,7 +72,7 @@ export const CustomCursor: React.FC = () => {
           width: isHovered ? 48 : 28,
           height: isHovered ? 48 : 28,
           rotate: 45,
-          borderRadius: isPointer ? "12px" : "4px",
+          borderRadius: 0,
         }}
         transition={{
           type: "spring",

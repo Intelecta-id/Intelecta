@@ -6,6 +6,7 @@ import { CustomCursor } from "@/components/ui/CustomCursor";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { WhatsAppButton } from "@/components/ui/WhatsAppButton";
+import { SplashScreen } from "@/components/ui/SplashScreen";
 
 const syne = Syne({
   subsets: ["latin"],
@@ -91,9 +92,14 @@ export default function RootLayout({
     <html
       lang="id"
       dir="ltr"
+      suppressHydrationWarning
       className={`${syne.variable} ${plusJakarta.variable} ${ibmPlexMono.variable}`}
     >
-      <body className="bg-[#030303] text-white font-sans antialiased selection:bg-white selection:text-black">
+      <body
+        suppressHydrationWarning
+        className="bg-[#030303] text-white font-sans antialiased selection:bg-white selection:text-black"
+      >
+        <SplashScreen />
         <SmoothScroll>
           <CustomCursor />
           <Navbar />

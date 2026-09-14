@@ -10,6 +10,7 @@ import {
   GlyphCheck,
 } from "@/components/ui/TechnicalGlyphs";
 import { MagneticButton } from "./MagneticButton";
+import { cn } from "@/lib/utils";
 
 interface CalendlyModalProps {
   isOpen: boolean;
@@ -37,37 +38,42 @@ export const CalendlyModal: React.FC<CalendlyModalProps> = ({ isOpen, onClose })
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 select-none">
           {/* Backdrop Overlay */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="absolute inset-0 bg-black/80 backdrop-blur-md"
+            className="absolute inset-0 bg-black/85 backdrop-blur-md"
           />
 
-          {/* Modal Container */}
+          {/* Modal Container (Sharp Box with Corner Brackets) */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.96, y: 15 }}
+            initial={{ opacity: 0, scale: 0.98, y: 15 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.96, y: 15 }}
-            transition={{ duration: 0.25, ease: "easeOut" }}
-            className="relative w-full max-w-lg overflow-hidden rounded-xl border border-white/15 bg-[#09090D] p-6 sm:p-8 shadow-2xl"
+            exit={{ opacity: 0, scale: 0.98, y: 15 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+            className="relative w-full max-w-lg overflow-hidden border border-white/20 bg-[#08080a] p-6 sm:p-8 shadow-2xl"
           >
+            <span className="corner-tl" />
+            <span className="corner-tr" />
+            <span className="corner-bl" />
+            <span className="corner-br" />
+
             {/* Close Button */}
             <button
               onClick={onClose}
               aria-label="Tutup modal"
-              className="absolute top-6 right-6 flex h-8 w-8 items-center justify-center rounded border border-white/10 bg-white/5 text-zinc-400 hover:bg-white/10 hover:text-white"
+              className="absolute top-6 right-6 flex h-8 w-8 items-center justify-center border border-white/15 bg-black text-zinc-400 hover:border-white hover:text-white transition-colors"
             >
               <GlyphClose className="h-4 w-4" />
             </button>
 
             {isBooked ? (
               <div className="py-8 text-center">
-                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full border border-emerald-500/20 bg-emerald-500/10 text-emerald-400">
-                  <GlyphCheck className="h-7 w-7" />
+                <div className="mx-auto flex h-12 w-12 items-center justify-center border border-emerald-500/30 bg-emerald-500/10 text-emerald-400">
+                  <GlyphCheck className="h-6 w-6" />
                 </div>
                 <h3 className="mt-4 font-display text-2xl font-bold uppercase text-white">
                   Sesi Konsultasi Terjadwal
@@ -75,8 +81,8 @@ export const CalendlyModal: React.FC<CalendlyModalProps> = ({ isOpen, onClose })
                 <p className="mt-2 font-sans text-sm text-zinc-300">
                   Undangan Google Meet telah dikirimkan ke email <span className="text-white font-mono">{formData.email}</span>.
                 </p>
-                <div className="mt-6 rounded border border-white/10 bg-white/5 p-4 text-xs text-zinc-400 font-mono">
-                  <p className="font-semibold text-white">Waktu Sesi:</p>
+                <div className="mt-6 border border-white/15 bg-black p-4 text-xs text-zinc-400 font-mono text-left">
+                  <p className="font-semibold text-white">WAKTU SESI:</p>
                   <p className="mt-1 text-zinc-300">
                     {availableSlots.find((s) => s.id === selectedSlot)?.date} (30 Menit)
                   </p>
@@ -87,7 +93,7 @@ export const CalendlyModal: React.FC<CalendlyModalProps> = ({ isOpen, onClose })
                     setSelectedSlot(null);
                     onClose();
                   }}
-                  className="mt-8 rounded bg-white px-6 py-2.5 font-mono text-xs font-bold uppercase text-black hover:bg-zinc-200"
+                  className="mt-8 bg-white px-6 py-2.5 font-mono text-xs font-bold uppercase text-black hover:bg-zinc-200 border border-white"
                 >
                   Selesai
                 </button>
@@ -100,7 +106,7 @@ export const CalendlyModal: React.FC<CalendlyModalProps> = ({ isOpen, onClose })
                     Jadwalkan Konsultasi Solusi
                   </h3>
                 </div>
-                <p className="mt-1 font-sans text-xs text-zinc-400">
+                <p className="mt-1 font-mono text-xs text-zinc-400">
                   Sesi 30 menit bersama Solutions Architect Intelecta via Google Meet.
                 </p>
 
@@ -117,11 +123,12 @@ export const CalendlyModal: React.FC<CalendlyModalProps> = ({ isOpen, onClose })
                             type="button"
                             key={slot.id}
                             onClick={() => setSelectedSlot(slot.id)}
-                            className={`flex items-center gap-2 rounded border p-3 text-left transition-all text-xs font-mono ${
+                            className={cn(
+                              "flex items-center gap-2 border p-3 text-left text-xs font-mono transition-colors",
                               isSelected
-                                ? "border-white bg-white/10 text-white font-semibold shadow-[0_0_15px_rgba(255,255,255,0.15)]"
-                                : "border-white/10 bg-white/[0.02] text-zinc-400 hover:border-white/20 hover:text-white"
-                            }`}
+                                ? "border-white bg-white text-black font-bold"
+                                : "border-white/15 bg-black text-zinc-400 hover:border-white/30 hover:text-white"
+                            )}
                           >
                             <GlyphClock className="h-3.5 w-3.5 shrink-0" />
                             <span>{slot.date}</span>
@@ -133,15 +140,15 @@ export const CalendlyModal: React.FC<CalendlyModalProps> = ({ isOpen, onClose })
 
                   <div>
                     <label className="block font-mono text-xs text-zinc-400 uppercase">
-                      NAMA ANDA *
+                      NAMA LENGKAP *
                     </label>
                     <input
                       type="text"
                       required
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      placeholder="Nama Lengkap"
-                      className="mt-1 w-full rounded border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder-zinc-600 focus:border-white focus:outline-none"
+                      placeholder="Nama Anda"
+                      className="mt-1 w-full border border-white/15 bg-black px-4 py-2.5 text-sm text-white placeholder-zinc-600 focus:border-white focus:outline-none font-mono"
                     />
                   </div>
 
@@ -155,7 +162,7 @@ export const CalendlyModal: React.FC<CalendlyModalProps> = ({ isOpen, onClose })
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       placeholder="email@perusahaan.com"
-                      className="mt-1 w-full rounded border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder-zinc-600 focus:border-white focus:outline-none"
+                      className="mt-1 w-full border border-white/15 bg-black px-4 py-2.5 text-sm text-white placeholder-zinc-600 focus:border-white focus:outline-none font-mono"
                     />
                   </div>
 
@@ -164,7 +171,7 @@ export const CalendlyModal: React.FC<CalendlyModalProps> = ({ isOpen, onClose })
                       type="submit"
                       variant="primary"
                       disabled={!selectedSlot}
-                      className="w-full"
+                      className="w-full justify-center"
                     >
                       <GlyphVideo className="h-4 w-4" />
                       <span>Konfirmasi Jadwal Meeting</span>

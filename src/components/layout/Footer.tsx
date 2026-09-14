@@ -9,7 +9,6 @@ import {
   GlyphLinkedin,
   GlyphTwitter,
   GlyphMail,
-  GlyphShieldCheck,
 } from "@/components/ui/TechnicalGlyphs";
 
 export const Footer: React.FC = () => {
@@ -18,13 +17,16 @@ export const Footer: React.FC = () => {
   };
 
   return (
-    <footer className="relative overflow-hidden border-t border-white/10 bg-[#020203] pt-20 pb-12">
+    <footer className="relative overflow-hidden border-t border-white/10 bg-black pt-20 pb-12 select-none">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-12">
           {/* Brand Info */}
           <div className="lg:col-span-5">
             <Link href="/" className="inline-flex items-center gap-3">
-              <div className="relative h-7 w-7">
+              <div
+                className="relative h-7 w-7"
+                style={{ position: "relative", width: "28px", height: "28px", minWidth: "28px", minHeight: "28px" }}
+              >
                 <Image
                   src="/images/logo-icon.svg"
                   alt="Intelecta"
@@ -42,13 +44,14 @@ export const Footer: React.FC = () => {
               Modern Cloud Infrastructure, Cybersecurity Zero Trust, dan Software Enterprise mission-critical di Indonesia.
             </p>
 
-            {/* System Status Badge */}
-            <div className="mt-6 inline-flex items-center gap-2 rounded border border-emerald-500/20 bg-emerald-500/10 px-3 py-1 text-xs font-mono text-emerald-400">
-              <span className="relative flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
-              </span>
-              <span>SEMUA SISTEM OPERASIONAL (UPTIME 99.99%)</span>
+            {/* System Status Badge (Sharp Box) */}
+            <div className="relative mt-6 inline-flex items-center gap-2 border border-emerald-500/30 bg-black px-3 py-1 text-xs font-mono text-emerald-400">
+              <span className="corner-tl !w-1 !h-1 !border-emerald-500" />
+              <span className="corner-tr !w-1 !h-1 !border-emerald-500" />
+              <span className="corner-bl !w-1 !h-1 !border-emerald-500" />
+              <span className="corner-br !w-1 !h-1 !border-emerald-500" />
+              <span className="h-1.5 w-1.5 rounded-none bg-emerald-400 animate-pulse" />
+              <span>STATUS: SEMUA SISTEM OPERASIONAL (99.99%)</span>
             </div>
           </div>
 
@@ -115,7 +118,7 @@ export const Footer: React.FC = () => {
               <ul className="mt-4 space-y-2.5 font-sans text-sm text-zinc-400">
                 <li className="flex items-center gap-2">
                   <GlyphMail className="h-4 w-4 text-zinc-500" />
-                  <span className="font-mono text-xs">contact@intelecta.id</span>
+                  <span className="font-mono text-xs text-white">advisory@intelecta.id</span>
                 </li>
                 <li className="text-xs text-zinc-400 leading-relaxed font-sans">
                   Sudirman Central Business District (SCBD), Tower One Lt. 28, Jakarta Selatan 12190
@@ -125,36 +128,41 @@ export const Footer: React.FC = () => {
           </div>
         </div>
 
-        {/* Large Decorative Faded Logo Backdrop */}
-        <div className="relative mt-16 flex justify-center overflow-hidden py-6 opacity-10 select-none pointer-events-none">
-          <span className="font-display text-[14vw] font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-b from-white via-zinc-500 to-transparent">
+        {/* ASCII Architectural Divider Bar (Harsh Dayal style) */}
+        <div className="mt-16 overflow-hidden whitespace-nowrap font-mono text-[10px] text-white/15 select-none pointer-events-none">
+          +--------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+        </div>
+
+        {/* Large Decorative Faded Logo Wordmark (Solid Faded White, No Gradient) */}
+        <div className="relative mt-8 flex justify-center overflow-hidden py-2 opacity-5 select-none pointer-events-none">
+          <span className="font-display text-[14vw] font-black tracking-widest text-white leading-none">
             INTELECTA
           </span>
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-8 flex flex-col items-center justify-between gap-4 border-t border-white/5 pt-8 sm:flex-row">
+        <div className="mt-6 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-6 sm:flex-row">
           <p className="font-mono text-xs text-zinc-500">
-            &copy; {new Date().getFullYear()} PT Intelecta Teknologi Nusantara. Hak Cipta Dilindungi.
+            &copy; {new Date().getFullYear()} PT Intelecta Teknologi Nusantara. All Rights Reserved.
           </p>
 
-          <div className="flex items-center gap-4">
-            <Link href="https://github.com" target="_blank" aria-label="GitHub Intelecta" className="text-zinc-500 hover:text-white transition-colors">
-              <GlyphGithub className="h-4 w-4" />
+          <div className="flex items-center gap-3">
+            <Link href="https://github.com" target="_blank" aria-label="GitHub Intelecta" className="border border-white/15 bg-[#08080a] p-2 text-zinc-400 hover:text-white hover:border-white transition-colors">
+              <GlyphGithub className="h-3.5 w-3.5" />
             </Link>
-            <Link href="https://linkedin.com" target="_blank" aria-label="LinkedIn Intelecta" className="text-zinc-500 hover:text-white transition-colors">
-              <GlyphLinkedin className="h-4 w-4" />
+            <Link href="https://linkedin.com" target="_blank" aria-label="LinkedIn Intelecta" className="border border-white/15 bg-[#08080a] p-2 text-zinc-400 hover:text-white hover:border-white transition-colors">
+              <GlyphLinkedin className="h-3.5 w-3.5" />
             </Link>
-            <Link href="https://twitter.com" target="_blank" aria-label="Twitter Intelecta" className="text-zinc-500 hover:text-white transition-colors">
-              <GlyphTwitter className="h-4 w-4" />
+            <Link href="https://twitter.com" target="_blank" aria-label="Twitter Intelecta" className="border border-white/15 bg-[#08080a] p-2 text-zinc-400 hover:text-white hover:border-white transition-colors">
+              <GlyphTwitter className="h-3.5 w-3.5" />
             </Link>
 
             <button
               onClick={scrollToTop}
               aria-label="Kembali ke atas"
-              className="ml-4 flex h-8 w-8 items-center justify-center rounded border border-white/10 bg-white/5 text-zinc-400 hover:bg-white/10 hover:text-white transition-all"
+              className="ml-2 flex h-8 w-8 items-center justify-center border border-white/20 bg-black text-zinc-400 hover:text-white hover:border-white transition-colors"
             >
-              <GlyphArrowUp className="h-4 w-4" />
+              <GlyphArrowUp className="h-3.5 w-3.5" />
             </button>
           </div>
         </div>

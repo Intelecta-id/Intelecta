@@ -361,20 +361,15 @@ export const Logo3DStage: React.FC<Logo3DStageProps> = ({
         )}
       />
 
-      {/* Cinematic Vignette Overlay */}
-      <div
-        className="pointer-events-none absolute inset-0 z-10"
-        style={{
-          background:
-            "radial-gradient(ellipse at 50% 48%, rgba(0,0,0,0) 35%, rgba(0,0,0,0.88) 100%)",
-        }}
-      />
-
-      {/* Floating HUD Meta Overlay */}
+      {/* Floating HUD Meta Overlay (Sharp Box) */}
       <div className="absolute top-6 left-6 z-20 flex items-center gap-3">
-        <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/70 px-3.5 py-1.5 backdrop-blur-md">
-          <span className="h-2 w-2 rounded-full bg-white shadow-[0_0_8px_#ffffff] animate-pulse" />
-          <span className="font-mono text-xs font-semibold text-zinc-200 tracking-wider">
+        <div className="relative inline-flex items-center gap-2 border border-white/20 bg-black px-3 py-1.5">
+          <span className="corner-tl !w-1 !h-1" />
+          <span className="corner-tr !w-1 !h-1" />
+          <span className="corner-bl !w-1 !h-1" />
+          <span className="corner-br !w-1 !h-1" />
+          <span className="h-1.5 w-1.5 rounded-none bg-white animate-pulse" />
+          <span className="font-mono text-xs font-bold text-white tracking-wider uppercase">
             INTELECTA 3D MONOLITH TRIO
           </span>
         </div>
@@ -383,18 +378,23 @@ export const Logo3DStage: React.FC<Logo3DStageProps> = ({
         </span>
       </div>
 
-      {/* Interactive Controls Overlay */}
+      {/* Interactive Controls Overlay (Sharp Box Control Panel) */}
       {showControls && (
         <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex flex-wrap items-center justify-center gap-3 w-full max-w-xl px-4">
-          <div className="flex items-center gap-2 rounded-full border border-white/15 bg-black/80 px-4 py-2 backdrop-blur-xl shadow-2xl">
+          <div className="relative flex items-center gap-2 border border-white/20 bg-black px-3 py-2 shadow-2xl">
+            <span className="corner-tl !w-1 !h-1" />
+            <span className="corner-tr !w-1 !h-1" />
+            <span className="corner-bl !w-1 !h-1" />
+            <span className="corner-br !w-1 !h-1" />
+
             {/* Auto Rotate Toggle */}
             <button
               onClick={() => setAutoRotate(!autoRotate)}
               className={cn(
-                "flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-mono transition-all",
+                "flex items-center gap-1.5 rounded-none px-3 py-1.5 text-xs font-mono transition-all border",
                 autoRotate
-                  ? "bg-white text-black font-bold shadow-[0_0_12px_rgba(255,255,255,0.4)]"
-                  : "bg-white/5 text-zinc-400 hover:text-white"
+                  ? "bg-white text-black font-bold border-white"
+                  : "bg-black text-zinc-400 border-white/15 hover:text-white hover:border-white/30"
               )}
             >
               <GlyphRotate className={cn("h-3.5 w-3.5", autoRotate && "animate-spin")} />
@@ -405,10 +405,10 @@ export const Logo3DStage: React.FC<Logo3DStageProps> = ({
             <button
               onClick={() => setWireframe(!wireframe)}
               className={cn(
-                "flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-mono transition-all",
+                "flex items-center gap-1.5 rounded-none px-3 py-1.5 text-xs font-mono transition-all border",
                 wireframe
-                  ? "bg-white text-black font-bold shadow-[0_0_12px_rgba(255,255,255,0.4)]"
-                  : "bg-white/5 text-zinc-400 hover:text-white"
+                  ? "bg-white text-black font-bold border-white"
+                  : "bg-black text-zinc-400 border-white/15 hover:text-white hover:border-white/30"
               )}
             >
               <GlyphEye className="h-3.5 w-3.5" />
@@ -419,10 +419,10 @@ export const Logo3DStage: React.FC<Logo3DStageProps> = ({
             <button
               onClick={() => setExplodeOffset(explodeOffset > 0 ? 0 : 0.85)}
               className={cn(
-                "flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-mono transition-all",
+                "flex items-center gap-1.5 rounded-none px-3 py-1.5 text-xs font-mono transition-all border",
                 explodeOffset > 0
-                  ? "bg-white text-black font-bold shadow-[0_0_12px_rgba(255,255,255,0.4)]"
-                  : "bg-white/5 text-zinc-400 hover:text-white"
+                  ? "bg-white text-black font-bold border-white"
+                  : "bg-black text-zinc-400 border-white/15 hover:text-white hover:border-white/30"
               )}
             >
               <GlyphLayers className="h-3.5 w-3.5" />

@@ -80,36 +80,30 @@ export default function Home() {
     <main ref={mainRef} className="relative min-h-screen bg-[#000000] text-white selection:bg-white selection:text-black">
       {/* Global Vertical Axis Tracker Line */}
       <div className="pointer-events-none fixed left-8 sm:left-12 top-0 bottom-0 z-10 w-[1px] bg-white/10 hidden xl:block">
-        <div className="global-axis-line w-full h-full bg-gradient-to-b from-white via-zinc-400 to-transparent shadow-[0_0_8px_#ffffff]" />
+        <div className="global-axis-line w-full h-full bg-white/40" />
       </div>
 
-      {/* 01 / HERO & SIGNAL (Monumental Layered Animated 3D Logo) */}
-      <CurtainSection id="beranda-curtain" zIndex={10} enablePin={true} sectionIndex="01" sectionLabel="signal">
+      <CurtainSection id="beranda-curtain">
         <HeroSection onOpenConsultation={() => setIsConsultationOpen(true)} />
       </CurtainSection>
 
-      {/* 02 / PENGENALAN & IDENTITAS INTELECTA */}
-      <CurtainSection id="showcase-3d-curtain" zIndex={20} enablePin={true} sectionIndex="02" sectionLabel="identitas studio">
+      <CurtainSection id="showcase-3d-curtain">
         <Lab3DSection />
       </CurtainSection>
 
-      {/* 03 / KAPABILITAS SISTEM (Services Matrix - United Carriers Format) */}
-      <CurtainSection id="layanan-curtain" zIndex={30} enablePin={true} sectionIndex="03" sectionLabel="kapabilitas sistem">
+      <CurtainSection id="layanan-curtain">
         <ServicesMatrix />
       </CurtainSection>
 
-      {/* 04 / BENCHMARK TRANSFORMASI (Before / After Horizontal On-Scroll Transition) */}
-      <CurtainSection id="transformasi-curtain" zIndex={35} enablePin={false} sectionIndex="04" sectionLabel="benchmark transformasi" className="overflow-visible min-h-[250vh]">
+      <section id="transformasi-section" className="relative w-full">
         <BeforeAfterCompare />
-      </CurtainSection>
+      </section>
 
-      {/* 05 / PONDASI ARSITEKTUR (3-Column Pillar Scrollytelling + Grand Right Logo) */}
-      <CurtainSection id="keunggulan-curtain" zIndex={40} enablePin={true} sectionIndex="05" sectionLabel="pondasi arsitektur">
+      <CurtainSection id="keunggulan-curtain">
         <WhyIntelecta />
       </CurtainSection>
 
-      {/* 06 / INISIASI & KONTAK (Contact Form & Interactive Architecture Console) */}
-      <CurtainSection id="kontak-curtain" zIndex={50} enablePin={false} sectionIndex="06" sectionLabel="inisiasi sistem">
+      <CurtainSection id="kontak-curtain">
         <ContactSection />
       </CurtainSection>
 

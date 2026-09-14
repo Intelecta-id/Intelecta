@@ -16,13 +16,18 @@ export const WhatsAppButton: React.FC = () => {
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Hubungi kami via WhatsApp"
-      className="group fixed bottom-6 right-6 z-40 flex h-12 w-12 items-center justify-center rounded-full border border-emerald-500/30 bg-emerald-600 text-white shadow-[0_0_25px_rgba(16,185,129,0.3)] transition-all duration-200 hover:scale-105 hover:bg-emerald-500"
+      className="group fixed bottom-6 right-6 z-40 relative flex h-11 w-11 items-center justify-center rounded-none border border-emerald-500/40 bg-black text-emerald-400 transition-colors duration-150 hover:bg-emerald-500 hover:text-black"
     >
+      <span className="corner-tl !w-1 !h-1 !border-emerald-500" />
+      <span className="corner-tr !w-1 !h-1 !border-emerald-500" />
+      <span className="corner-bl !w-1 !h-1 !border-emerald-500" />
+      <span className="corner-br !w-1 !h-1 !border-emerald-500" />
+
       <GlyphWhatsApp className="h-5 w-5 fill-current" />
 
-      {/* Tooltip on Hover */}
-      <span className="pointer-events-none absolute right-16 hidden whitespace-nowrap rounded border border-white/10 bg-[#09090D] px-3 py-1 font-mono text-xs text-white opacity-0 shadow-xl backdrop-blur-md transition-all duration-200 group-hover:opacity-100 sm:block">
-        Chat WhatsApp Konsultan
+      {/* Tooltip on Hover (Sharp Box) */}
+      <span className="pointer-events-none absolute right-14 hidden whitespace-nowrap rounded-none border border-white/20 bg-black px-3 py-1 font-mono text-[11px] uppercase tracking-wider text-white opacity-0 transition-opacity duration-150 group-hover:opacity-100 sm:block">
+        Chat WhatsApp
       </span>
     </a>
   );

@@ -64,20 +64,29 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
           y: isVisible ? 0 : -100,
           opacity: isVisible ? 1 : 0,
         }}
-        transition={{ duration: 0.35, ease: "easeInOut" }}
-        className="fixed top-5 inset-x-0 z-50 flex justify-center px-4 sm:px-6"
+        transition={{ duration: 0.3, ease: "easeOut" }}
+        className="fixed top-5 inset-x-0 z-50 flex justify-center px-4 sm:px-6 select-none"
       >
         <nav
           className={cn(
-            "flex items-center justify-between gap-4 rounded-md px-4 py-2.5 transition-all duration-300 sm:px-6 sm:py-3",
+            "relative flex items-center justify-between gap-4 rounded-none px-4 py-2 sm:px-6 sm:py-2.5 transition-colors border",
             isScrolled
-              ? "glass-pill shadow-[0_8px_32px_rgba(0,0,0,0.8)]"
-              : "bg-black/60 border border-white/8 backdrop-blur-md"
+              ? "bg-black border-white/25 shadow-2xl"
+              : "bg-black/90 border-white/15 backdrop-blur-md"
           )}
         >
+          {/* Corner Crosshairs */}
+          <span className="corner-tl !w-1 !h-1" />
+          <span className="corner-tr !w-1 !h-1" />
+          <span className="corner-bl !w-1 !h-1" />
+          <span className="corner-br !w-1 !h-1" />
+
           {/* Logo Brand */}
           <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="relative h-6 w-6 transition-transform duration-200 group-hover:scale-105">
+            <div
+              className="relative h-6 w-6 transition-transform duration-200 group-hover:scale-105"
+              style={{ position: "relative", width: "24px", height: "24px", minWidth: "24px", minHeight: "24px" }}
+            >
               <Image
                 src="/images/logo-icon.svg"
                 alt="Intelecta"
@@ -85,7 +94,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
                 className="object-contain"
               />
             </div>
-            <span className="font-display text-sm font-extrabold tracking-widest text-white transition-colors duration-200 group-hover:text-zinc-200 uppercase">
+            <span className="font-display text-sm font-extrabold tracking-widest text-white transition-colors duration-200 group-hover:text-zinc-300 uppercase">
               INTELECTA
             </span>
           </Link>
@@ -100,14 +109,14 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
                   key={link.label}
                   href={link.href}
                   className={cn(
-                    "relative rounded px-3 py-1.5 font-mono text-[11px] uppercase tracking-wider transition-colors duration-200 flex items-center gap-1.5",
+                    "relative px-3 py-1 font-mono text-[11px] uppercase tracking-wider transition-colors flex items-center gap-1.5 border",
                     isCurrent
-                      ? "bg-white/10 text-white font-bold"
-                      : "text-zinc-400 hover:bg-white/5 hover:text-white"
+                      ? "bg-white text-black font-bold border-white"
+                      : "text-zinc-400 border-transparent hover:text-white hover:border-white/20"
                   )}
                 >
                   {link.is3D && (
-                    <span className="h-1.5 w-1.5 rounded-sm bg-white shadow-[0_0_6px_#ffffff] animate-pulse" />
+                    <span className="h-1.5 w-1.5 rounded-none bg-white" />
                   )}
                   <span>{link.label}</span>
                 </Link>
@@ -125,7 +134,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
                   window.location.href = "/#kontak";
                 }
               }}
-              className="hidden sm:inline-flex items-center gap-1.5 rounded bg-white px-4 py-2 font-mono text-xs font-bold uppercase tracking-wider text-black transition-all duration-200 hover:bg-zinc-200 hover:shadow-[0_0_15px_rgba(255,255,255,0.4)]"
+              className="hidden sm:inline-flex items-center gap-1.5 bg-white px-4 py-1.5 font-mono text-xs font-bold uppercase tracking-wider text-black border border-white hover:bg-zinc-200 transition-colors"
             >
               <span>Konsultasi</span>
               <GlyphArrowUpRight className="h-3.5 w-3.5" />
@@ -135,7 +144,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-label="Buka menu navigasi"
-              className="flex h-8 w-8 items-center justify-center rounded border border-white/10 bg-white/5 text-white transition-colors hover:bg-white/10 md:hidden"
+              className="flex h-8 w-8 items-center justify-center border border-white/20 bg-black text-white hover:border-white md:hidden transition-colors"
             >
               {mobileMenuOpen ? <GlyphClose className="h-4 w-4" /> : <GlyphMenu className="h-4 w-4" />}
             </button>
@@ -143,27 +152,32 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
         </nav>
       </motion.header>
 
-      {/* Mobile Drawer Overlay */}
+      {/* Mobile Drawer Overlay (Sharp Box) */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -15 }}
+            initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -15 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-x-4 top-20 z-40 rounded-lg border border-white/15 bg-[#09090D]/95 p-6 shadow-2xl backdrop-blur-2xl md:hidden"
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.15 }}
+            className="fixed inset-x-4 top-20 z-40 relative border border-white/20 bg-black p-6 shadow-2xl md:hidden"
           >
+            <span className="corner-tl" />
+            <span className="corner-tr" />
+            <span className="corner-bl" />
+            <span className="corner-br" />
+
             <div className="flex flex-col gap-2">
               {navLinks.map((link) => (
                 <Link
                   key={link.label}
                   href={link.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center justify-between rounded px-4 py-2.5 font-mono text-xs uppercase tracking-wider text-zinc-300 hover:bg-white/5 hover:text-white"
+                  className="flex items-center justify-between px-3 py-2 font-mono text-xs uppercase tracking-wider text-zinc-300 hover:bg-white hover:text-black transition-colors"
                 >
                   <span>{link.label}</span>
                   {link.is3D && (
-                    <span className="font-mono text-[10px] bg-white/10 px-2 py-0.5 rounded text-white">
+                    <span className="font-mono text-[10px] border border-white/20 px-1.5 py-0.5 text-zinc-400">
                       3D
                     </span>
                   )}
@@ -179,7 +193,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
                       window.location.href = "/#kontak";
                     }
                   }}
-                  className="flex w-full items-center justify-center gap-2 rounded bg-white px-4 py-3 font-mono text-xs font-bold uppercase tracking-wider text-black hover:bg-zinc-200"
+                  className="flex w-full items-center justify-center gap-2 bg-white px-4 py-3 font-mono text-xs font-bold uppercase tracking-wider text-black hover:bg-zinc-200 border border-white"
                 >
                   <span>Jadwalkan Konsultasi</span>
                   <GlyphArrowUpRight className="h-4 w-4" />
