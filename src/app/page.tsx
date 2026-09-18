@@ -37,6 +37,11 @@ const WhyIntelecta = dynamic(
   { ssr: false }
 );
 
+const TeamSection = dynamic(
+  () => import("@/components/team/TeamSection").then((mod) => mod.TeamSection),
+  { ssr: false }
+);
+
 const ContactSection = dynamic(
   () => import("@/components/contact/ContactSection").then((mod) => mod.ContactSection),
   { ssr: false }
@@ -101,6 +106,10 @@ export default function Home() {
 
       <CurtainSection id="keunggulan-curtain">
         <WhyIntelecta />
+      </CurtainSection>
+
+      <CurtainSection id="tim-curtain">
+        <TeamSection />
       </CurtainSection>
 
       <CurtainSection id="kontak-curtain">

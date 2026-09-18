@@ -118,7 +118,7 @@ export const CaseStudies: React.FC = () => {
                   <div className="mt-8 space-y-4 rounded-lg border border-white/8 bg-black/60 p-6">
                     <div>
                       <span className="font-mono text-[11px] uppercase tracking-wider text-red-400">
-                        // TANTANGAN ARSITEKTUR
+                        {"// TANTANGAN ARSITEKTUR"}
                       </span>
                       <p className="mt-1 font-sans text-sm text-zinc-400 leading-relaxed">
                         {activeCase.challenge}
@@ -127,7 +127,7 @@ export const CaseStudies: React.FC = () => {
 
                     <div className="border-t border-white/8 pt-3">
                       <span className="font-mono text-[11px] uppercase tracking-wider text-emerald-400">
-                        // SOLUSI REKAYASA INTELECTA
+                        {"// SOLUSI REKAYASA INTELECTA"}
                       </span>
                       <p className="mt-1 font-sans text-sm text-zinc-300 leading-relaxed">
                         {activeCase.solution}

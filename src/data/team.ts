@@ -113,7 +113,7 @@ export const teamData: TeamMember[] = [
     department: "Cybersecurity & Governance",
     avatarPlaceholder: "FP",
     tagline: "Membangun benteng pertahanan digital Zero Trust lapis baja untuk aset nasional.",
-    bio: "Pakar keamanan siber bersertifikasi CISSP dan CEH dengan pengalaman lebih dari 9 tahun menangani insiden keamanan kritis dan perancangan arsitektur Zero Trust. Kerap dipercaya sebagai konsultan audit kepatuhan keamanan data sektor keuangan dan institusi publik.",
+    bio: "Spesialis keamanan siber bersertifikasi CISSP dan CEH dengan pengalaman lebih dari 9 tahun menangani insiden keamanan kritis dan perancangan arsitektur Zero Trust. Kerap dipercaya sebagai konsultan audit kepatuhan keamanan data sektor keuangan dan institusi publik.",
     yearsOfExp: 9,
     featuredProjectsCount: 22,
     skills: [

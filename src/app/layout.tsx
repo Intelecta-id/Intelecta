@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from "next";
 import { Syne, Plus_Jakarta_Sans, IBM_Plex_Mono } from "next/font/google";
 import "@/styles/globals.css";
 import { SmoothScroll } from "@/components/layout/SmoothScroll";
-import { CustomCursor } from "@/components/ui/CustomCursor";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { WhatsAppButton } from "@/components/ui/WhatsAppButton";
@@ -101,7 +100,6 @@ export default function RootLayout({
       >
         <SplashScreen />
         <SmoothScroll>
-          <CustomCursor />
           <Navbar />
           {children}
           <Footer />

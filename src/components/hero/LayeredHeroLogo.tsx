@@ -418,7 +418,6 @@ export const LayeredHeroLogo = forwardRef<LayeredHeroLogoRef, LayeredHeroLogoPro
           className="relative flex flex-col items-center justify-center preserve-3d cursor-pointer w-full"
           style={{ transformStyle: "preserve-3d" }}
           onClick={() => triggerPulseSurge()}
-          title="Klik untuk memicu Energy Pulse Surge!"
         >
           {/* Laser Sweep Scanner Effect for Materialization */}
           <div

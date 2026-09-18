@@ -43,7 +43,7 @@ export default function TeamListPage() {
         {/* Header */}
         <div className="mt-8 text-center max-w-3xl mx-auto border-b border-white/10 pb-8">
           <div className="inline-flex items-center gap-2 rounded bg-white/5 px-2.5 py-1 font-mono text-[11px] text-zinc-400 border border-white/5">
-            <span>DEWAN PAKAR ARSITEKTUR REKAYASA</span>
+            <span>TIM INTELECTA // ARSITEKTUR REKAYASA</span>
           </div>
           <h1 className="mt-4 font-display text-4xl font-extrabold uppercase tracking-tight text-white sm:text-5xl lg:text-6xl">
             Para Spesialis di Balik Intelecta

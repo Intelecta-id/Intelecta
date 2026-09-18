@@ -1,18 +1,16 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React from "react";
 import { GlyphArrowRight, GlyphCalendar, GlyphShield, GlyphCpu, GlyphLayers } from "@/components/ui/TechnicalGlyphs";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 import { ScrambleText } from "@/components/ui/ScrambleText";
-import { Hero3DCanvas, Hero3DCanvasRef, Hero3DMode } from "./Hero3DCanvas";
+import { LayeredHeroLogo } from "./LayeredHeroLogo";
 
 interface HeroSectionProps {
   onOpenConsultation?: () => void;
 }
 
 export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenConsultation }) => {
-  const canvas3DRef = useRef<Hero3DCanvasRef>(null);
-  const [active3DMode, setActive3DMode] = useState<Hero3DMode>("float");
 
   return (
     <section
@@ -114,12 +112,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenConsultation }) 
             </div>
           </div>
 
-          {/* Right Column: Three.js Interactive 3D Canvas (5 cols) */}
+          {/* Right Column: Layered SVG Interactive Logo (5 cols) */}
           <div className="flex flex-col items-center justify-center lg:col-span-5 w-full">
-            <Hero3DCanvas
-              ref={canvas3DRef}
-              initialMode={active3DMode}
-              onModeChange={(mode) => setActive3DMode(mode)}
+            <LayeredHeroLogo
+              initialMode="float"
               className="w-full"
             />
           </div>

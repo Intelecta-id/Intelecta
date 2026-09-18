@@ -22,9 +22,9 @@ export function generateStaticParams() {
 export default async function TeamMemberPage({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: { slug: string };
 }) {
-  const { slug } = await params;
+  const { slug } = params;
   const member = teamData.find((m) => m.slug === slug);
 
   if (!member) {
@@ -36,11 +36,11 @@ export default async function TeamMemberPage({
       <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
         {/* Back Link */}
         <Link
-          href="/tim"
+          href="/#tim"
           className="inline-flex items-center gap-2 rounded border border-white/10 bg-white/5 px-4 py-2 text-xs font-mono text-zinc-400 backdrop-blur-md transition-colors hover:bg-white/10 hover:text-white"
         >
           <GlyphArrowLeft className="h-3.5 w-3.5" />
-          <span>KEMBALI KE DEWAN PAKAR</span>
+          <span>KEMBALI KE TIM INTELECTA</span>
         </Link>
 
         {/* Profile Hero Header */}
@@ -139,7 +139,7 @@ export default async function TeamMemberPage({
         {/* Biografi & Background */}
         <div className="mt-8 rounded-xl border border-white/10 bg-[#09090D] p-8 sm:p-10 backdrop-blur-xl">
           <h2 className="font-mono text-xs uppercase tracking-wider text-zinc-400">
-            // PROFIL & REKAM JEJAK TEKNOLOGI
+            {"// PROFIL & REKAM JEJAK TEKNOLOGI"}
           </h2>
           <p className="mt-4 font-sans text-base leading-relaxed text-zinc-300">
             {member.bio}
@@ -149,7 +149,7 @@ export default async function TeamMemberPage({
         {/* Keahlian & Spesialisasi Teknis */}
         <div className="mt-8 rounded-xl border border-white/10 bg-[#09090D] p-8 sm:p-10 backdrop-blur-xl">
           <h2 className="font-mono text-xs uppercase tracking-wider text-zinc-400">
-            // KEAHLIAN & MATRIKS SPESIALISASI
+            {"// KEAHLIAN & MATRIKS SPESIALISASI"}
           </h2>
 
           <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">

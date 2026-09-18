@@ -44,15 +44,6 @@ export const Footer: React.FC = () => {
               Modern Cloud Infrastructure, Cybersecurity Zero Trust, dan Software Enterprise mission-critical di Indonesia.
             </p>
 
-            {/* System Status Badge (Sharp Box) */}
-            <div className="relative mt-6 inline-flex items-center gap-2 border border-emerald-500/30 bg-black px-3 py-1 text-xs font-mono text-emerald-400">
-              <span className="corner-tl !w-1 !h-1 !border-emerald-500" />
-              <span className="corner-tr !w-1 !h-1 !border-emerald-500" />
-              <span className="corner-bl !w-1 !h-1 !border-emerald-500" />
-              <span className="corner-br !w-1 !h-1 !border-emerald-500" />
-              <span className="h-1.5 w-1.5 rounded-none bg-emerald-400 animate-pulse" />
-              <span>STATUS: SEMUA SISTEM OPERASIONAL (99.99%)</span>
-            </div>
           </div>
 
           {/* Navigation Columns */}
@@ -88,8 +79,8 @@ export const Footer: React.FC = () => {
               </h3>
               <ul className="mt-4 space-y-2.5 font-sans text-sm text-zinc-400">
                 <li>
-                  <Link href="/tim" className="hover:text-white transition-colors">
-                    Dewan Pakar
+                  <Link href="/#tim" className="hover:text-white transition-colors">
+                    Tim Intelecta
                   </Link>
                 </li>
                 <li>

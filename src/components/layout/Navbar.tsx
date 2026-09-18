@@ -52,7 +52,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
     { label: "Layanan", href: "/#layanan" },
     { label: "Transformasi", href: "/#transformasi" },
     { label: "Pondasi", href: "/#keunggulan" },
-    { label: "Pakar", href: "/tim" },
+    { label: "Tim Intelecta", href: "/#tim" },
     { label: "Kontak", href: "/#kontak" },
   ];
 
