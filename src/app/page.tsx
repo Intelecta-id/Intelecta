@@ -5,45 +5,25 @@ import dynamic from "next/dynamic";
 import { HeroSection } from "@/components/hero/HeroSection";
 import { ServicesMatrix } from "@/components/services/ServicesMatrix";
 import { CurtainSection } from "@/components/transitions/CurtainSection";
+import { FloatingBottomDock } from "@/components/layout/FloatingBottomDock";
+import { CommandMenuModal } from "@/components/ui/CommandMenuModal";
 import { gsap } from "@/lib/gsap-config";
 
-// Code splitting: Dynamically import heavy WebGL & complex below-the-fold components
-const Lab3DSection = dynamic(
-  () => import("@/components/three/Lab3DSection").then((mod) => mod.Lab3DSection),
-  {
-    ssr: false,
-    loading: () => (
-      <div className="w-full h-[650px] bg-black flex items-center justify-center font-mono text-xs text-zinc-600">
-        MEMUAT MODUL 3D...
-      </div>
-    ),
-  }
-);
-
+// Code splitting for Below-The-Fold complex components
 const BeforeAfterCompare = dynamic(
   () => import("@/components/compare/BeforeAfterCompare").then((mod) => mod.BeforeAfterCompare),
   {
     ssr: false,
     loading: () => (
       <div className="w-full h-screen bg-[#020204] flex items-center justify-center font-mono text-xs text-zinc-600">
-        MEMUAT MATRIKS TRANSFORMASI...
+        MEMUAT MATRIKS TRANSFORMASI SEBELUM / SESUDAH...
       </div>
     ),
   }
 );
 
-const WhyIntelecta = dynamic(
-  () => import("@/components/why-intelecta/WhyIntelecta").then((mod) => mod.WhyIntelecta),
-  { ssr: false }
-);
-
 const TeamSection = dynamic(
   () => import("@/components/team/TeamSection").then((mod) => mod.TeamSection),
-  { ssr: false }
-);
-
-const ContactSection = dynamic(
-  () => import("@/components/contact/ContactSection").then((mod) => mod.ContactSection),
   { ssr: false }
 );
 
@@ -54,6 +34,7 @@ const CalendlyModal = dynamic(
 
 export default function Home() {
   const [isConsultationOpen, setIsConsultationOpen] = useState(false);
+  const [isCommandOpen, setIsCommandOpen] = useState(false);
   const mainRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -78,43 +59,60 @@ export default function Home() {
       }
     }, mainRef);
 
-    return () => ctx.revert();
+    // Global shortcut Ctrl+K / Cmd+K listener
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        setIsCommandOpen((prev) => !prev);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      ctx.revert();
+      window.removeEventListener("keydown", handleKeyDown);
+    };
   }, []);
 
   return (
     <main ref={mainRef} className="relative min-h-screen bg-[#000000] text-white selection:bg-white selection:text-black">
-      {/* Global Vertical Axis Tracker Line */}
+      {/* Global Vertical Axis Tracker Line (Swiss Engineering Guideline) */}
       <div className="pointer-events-none fixed left-8 sm:left-12 top-0 bottom-0 z-10 w-[1px] bg-white/10 hidden xl:block">
         <div className="global-axis-line w-full h-full bg-white/40" />
       </div>
 
+      {/* 1. LANDING PAGE & 3D PROCEDURAL CENTERPIECE */}
       <CurtainSection id="beranda-curtain">
         <HeroSection onOpenConsultation={() => setIsConsultationOpen(true)} />
       </CurtainSection>
 
-      <CurtainSection id="showcase-3d-curtain">
-        <Lab3DSection />
-      </CurtainSection>
-
+      {/* 2. SERVICES / LAYANAN */}
       <CurtainSection id="layanan-curtain">
         <ServicesMatrix />
       </CurtainSection>
 
+      {/* 3. BEFORE / AFTER TRANSFORMATION MATRIX */}
       <section id="transformasi-section" className="relative w-full">
         <BeforeAfterCompare />
       </section>
 
-      <CurtainSection id="keunggulan-curtain">
-        <WhyIntelecta />
-      </CurtainSection>
-
+      {/* 4. TIM INTELECTA */}
       <CurtainSection id="tim-curtain">
         <TeamSection />
       </CurtainSection>
 
-      <CurtainSection id="kontak-curtain">
-        <ContactSection />
-      </CurtainSection>
+      {/* 5. BOTTOM BAR (FLOATING DOCK & COMMAND MATRIX) */}
+      <FloatingBottomDock
+        onOpenCommand={() => setIsCommandOpen(true)}
+        onOpenConsultation={() => setIsConsultationOpen(true)}
+      />
+
+      {/* Command Menu Modal (Ctrl + K) */}
+      <CommandMenuModal
+        isOpen={isCommandOpen}
+        onClose={() => setIsCommandOpen(false)}
+        onOpenConsultation={() => setIsConsultationOpen(true)}
+      />
 
       {/* Calendly Consultation Modal */}
       <CalendlyModal

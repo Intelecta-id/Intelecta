@@ -36,3 +36,11 @@ next-env.d.ts
 
 # cloudflare wrangler
 .wrangler
+
+# ai agent & skills
+.agents/
+.agent/
+_agents/
+_agent/
+skills/
+

@@ -1,10 +1,22 @@
 "use client";
 
 import React from "react";
+import dynamic from "next/dynamic";
 import { GlyphArrowRight, GlyphCalendar, GlyphShield, GlyphCpu, GlyphLayers } from "@/components/ui/TechnicalGlyphs";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 import { ScrambleText } from "@/components/ui/ScrambleText";
-import { LayeredHeroLogo } from "./LayeredHeroLogo";
+
+const Hero3DCenterpiece = dynamic(
+  () => import("./Hero3DCenterpiece").then((mod) => mod.Hero3DCenterpiece),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="w-full max-w-[480px] aspect-square flex items-center justify-center font-mono text-xs text-zinc-600 border border-white/10 bg-black/40">
+        [ INISIALISASI 3D CORE... ]
+      </div>
+    ),
+  }
+);
 
 interface HeroSectionProps {
   onOpenConsultation?: () => void;
@@ -112,12 +124,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenConsultation }) 
             </div>
           </div>
 
-          {/* Right Column: Layered SVG Interactive Logo (5 cols) */}
+          {/* Right Column: Interactive 3D Architectural Centerpiece (5 cols) */}
           <div className="flex flex-col items-center justify-center lg:col-span-5 w-full">
-            <LayeredHeroLogo
-              initialMode="float"
-              className="w-full"
-            />
+            <Hero3DCenterpiece />
           </div>
         </div>
       </div>

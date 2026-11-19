@@ -47,13 +47,10 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
   }, [lastScrollY]);
 
   const navLinks: { label: string; href: string; is3D?: boolean }[] = [
-    { label: "Beranda", href: "/#beranda" },
-    { label: "Identitas", href: "/#3d-showcase" },
+    { label: "Beranda", href: "/#beranda", is3D: true },
     { label: "Layanan", href: "/#layanan" },
-    { label: "Transformasi", href: "/#transformasi" },
-    { label: "Pondasi", href: "/#keunggulan" },
+    { label: "Sebelum / Sesudah", href: "/#transformasi-section" },
     { label: "Tim Intelecta", href: "/#tim" },
-    { label: "Kontak", href: "/#kontak" },
   ];
 
   return (
