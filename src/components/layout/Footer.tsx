@@ -119,13 +119,8 @@ export const Footer: React.FC = () => {
           </div>
         </div>
 
-        {/* ASCII Architectural Divider Bar (Harsh Dayal style) */}
-        <div className="mt-16 overflow-hidden whitespace-nowrap font-mono text-[10px] text-white/15 select-none pointer-events-none">
-          +--------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-        </div>
-
-        {/* Large Decorative Faded Logo Wordmark (Solid Faded White, No Gradient) */}
-        <div className="relative mt-8 flex justify-center overflow-hidden py-2 opacity-5 select-none pointer-events-none">
+        {/* Large Decorative Faded Logo Wordmark */}
+        <div className="relative mt-16 flex justify-center overflow-hidden py-2 opacity-5 select-none pointer-events-none">
           <span className="font-display text-[14vw] font-black tracking-widest text-white leading-none">
             INTELECTA
           </span>
@@ -133,25 +128,25 @@ export const Footer: React.FC = () => {
 
         {/* Bottom Bar */}
         <div className="mt-6 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-6 sm:flex-row">
-          <p className="font-mono text-xs text-zinc-500">
+          <p className="font-sans text-xs text-zinc-500">
             &copy; {new Date().getFullYear()} PT Intelecta Teknologi Nusantara. All Rights Reserved.
           </p>
 
           <div className="flex items-center gap-3">
-            <Link href="https://github.com" target="_blank" aria-label="GitHub Intelecta" className="border border-white/15 bg-[#08080a] p-2 text-zinc-400 hover:text-white hover:border-white transition-colors">
+            <Link href="https://github.com" target="_blank" aria-label="GitHub Intelecta" className="rounded-full border border-white/15 bg-white/5 p-2 text-zinc-400 hover:text-white hover:border-white transition-colors">
               <GlyphGithub className="h-3.5 w-3.5" />
             </Link>
-            <Link href="https://linkedin.com" target="_blank" aria-label="LinkedIn Intelecta" className="border border-white/15 bg-[#08080a] p-2 text-zinc-400 hover:text-white hover:border-white transition-colors">
+            <Link href="https://linkedin.com" target="_blank" aria-label="LinkedIn Intelecta" className="rounded-full border border-white/15 bg-white/5 p-2 text-zinc-400 hover:text-white hover:border-white transition-colors">
               <GlyphLinkedin className="h-3.5 w-3.5" />
             </Link>
-            <Link href="https://twitter.com" target="_blank" aria-label="Twitter Intelecta" className="border border-white/15 bg-[#08080a] p-2 text-zinc-400 hover:text-white hover:border-white transition-colors">
+            <Link href="https://twitter.com" target="_blank" aria-label="Twitter Intelecta" className="rounded-full border border-white/15 bg-white/5 p-2 text-zinc-400 hover:text-white hover:border-white transition-colors">
               <GlyphTwitter className="h-3.5 w-3.5" />
             </Link>
 
             <button
               onClick={scrollToTop}
               aria-label="Kembali ke atas"
-              className="ml-2 flex h-8 w-8 items-center justify-center border border-white/20 bg-black text-zinc-400 hover:text-white hover:border-white transition-colors"
+              className="ml-2 flex h-8 w-8 items-center justify-center rounded-full border border-white/20 bg-black text-zinc-400 hover:text-white hover:border-white transition-colors"
             >
               <GlyphArrowUp className="h-3.5 w-3.5" />
             </button>

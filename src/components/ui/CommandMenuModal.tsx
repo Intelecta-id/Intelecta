@@ -163,17 +163,11 @@ export const CommandMenuModal: React.FC<CommandMenuModalProps> = ({
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="relative w-full max-w-xl border border-white/20 bg-[#07070a] shadow-[0_20px_80px_rgba(0,0,0,0.9),0_0_50px_rgba(255,255,255,0.06)] overflow-hidden"
+        className="relative w-full max-w-xl rounded-2xl border border-white/15 bg-[#0f1013] shadow-[0_25px_80px_rgba(0,0,0,0.9)] overflow-hidden"
       >
-        {/* Technical Corner Markers */}
-        <span className="corner-tl !w-1.5 !h-1.5" />
-        <span className="corner-tr !w-1.5 !h-1.5" />
-        <span className="corner-bl !w-1.5 !h-1.5" />
-        <span className="corner-br !w-1.5 !h-1.5" />
-
         {/* Search Header Input */}
         <div className="flex h-14 items-center gap-3 border-b border-white/10 px-4 bg-black/40">
-          <span className="font-mono text-xs text-zinc-500">⌘/&gt;</span>
+          <span className="font-mono text-xs text-zinc-500">⌘</span>
           <input
             type="text"
             value={query}
@@ -182,7 +176,7 @@ export const CommandMenuModal: React.FC<CommandMenuModalProps> = ({
             autoFocus
             className="w-full bg-transparent font-sans text-sm text-white placeholder-zinc-500 outline-none"
           />
-          <kbd className="border border-white/15 bg-white/5 px-2 py-0.5 font-mono text-[10px] text-zinc-400">
+          <kbd className="rounded border border-white/15 bg-white/5 px-2 py-0.5 font-mono text-[10px] text-zinc-400">
             ESC
           </kbd>
         </div>
@@ -248,9 +242,9 @@ export const CommandMenuModal: React.FC<CommandMenuModalProps> = ({
         </div>
 
         {/* Footer Meta bar */}
-        <div className="flex h-9 items-center justify-between border-t border-white/10 bg-black/60 px-4 font-mono text-[10px] text-zinc-500">
-          <span>INTELECTA // COMMAND KERNEL v2.0</span>
-          <span>NAV: ↑ ↓ | EKSEKUSI: ENTER</span>
+        <div className="flex h-10 items-center justify-between border-t border-white/10 bg-black/40 px-4 text-[11px] text-zinc-500 font-sans">
+          <span>Intelecta Quick Actions</span>
+          <span>Navigasi: ↑ ↓ | Pilih: Enter</span>
         </div>
       </div>
     </div>

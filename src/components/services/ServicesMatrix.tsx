@@ -41,17 +41,12 @@ export const ServicesMatrix: React.FC = () => {
                 key={service.id}
                 onClick={() => setActiveServiceId(service.id)}
                 className={cn(
-                  "relative flex flex-col justify-between text-left p-6 transition-colors duration-150 border",
+                  "relative flex flex-col justify-between text-left p-6 transition-all duration-200 rounded-xl border",
                   isActive
-                    ? "bg-white text-black font-semibold border-white"
-                    : "bg-[#08080a] border-white/15 text-zinc-400 hover:border-white/30 hover:text-white"
+                    ? "bg-white text-black font-semibold border-white shadow-[0_0_20px_rgba(255,255,255,0.15)]"
+                    : "bg-[#0c0d10] border-white/10 text-zinc-400 hover:border-white/25 hover:text-white"
                 )}
               >
-                <span className={cn("corner-tl !w-1.5 !h-1.5", isActive ? "!border-black" : "")} />
-                <span className={cn("corner-tr !w-1.5 !h-1.5", isActive ? "!border-black" : "")} />
-                <span className={cn("corner-bl !w-1.5 !h-1.5", isActive ? "!border-black" : "")} />
-                <span className={cn("corner-br !w-1.5 !h-1.5", isActive ? "!border-black" : "")} />
-
                 <div className="flex items-center justify-between">
                   <span className={cn("text-xs font-mono font-bold", isActive ? "text-zinc-700" : "text-zinc-500")}>
                     0{index + 1}
@@ -81,7 +76,7 @@ export const ServicesMatrix: React.FC = () => {
           })}
         </div>
 
-        {/* Detailed Inspection Panel of Active Service (Sharp Box with Corner Brackets) */}
+        {/* Detailed Inspection Panel of Active Service */}
         <AnimatePresence mode="wait">
           <motion.div
             key={activeService.id}
@@ -89,13 +84,8 @@ export const ServicesMatrix: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -15 }}
             transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-            className="relative mt-6 border border-white/20 bg-[#070709] p-8 sm:p-12"
+            className="relative mt-6 rounded-2xl border border-white/15 bg-[#090a0d] p-8 sm:p-12 shadow-xl"
           >
-            <span className="corner-tl" />
-            <span className="corner-tr" />
-            <span className="corner-bl" />
-            <span className="corner-br" />
-
             <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-12">
               {/* Left Overview */}
               <div className="lg:col-span-7 flex flex-col justify-between">

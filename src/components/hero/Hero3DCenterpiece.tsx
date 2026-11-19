@@ -173,29 +173,8 @@ export const Hero3DCenterpiece: React.FC = () => {
       onPointerLeave={handlePointerLeave}
       className="relative flex items-center justify-center w-full max-w-[480px] lg:max-w-[540px] aspect-square select-none group"
     >
-      {/* Background Radial Glow */}
-      <div className="absolute inset-0 bg-gradient-to-tr from-white/[0.04] via-zinc-500/[0.02] to-transparent rounded-full blur-3xl pointer-events-none" />
-
-      {/* Technical HUD Ring Measurements (Swiss Blueprint Style) */}
-      <div className="pointer-events-none absolute inset-4 sm:inset-6 rounded-full border border-white/10 border-dashed animate-[spin_60s_linear_infinite]" />
-      <div className="pointer-events-none absolute inset-12 sm:inset-16 rounded-full border border-white/5" />
-
-      {/* Corner Crosshairs */}
-      <span className="pointer-events-none absolute top-2 left-2 text-[10px] font-mono text-zinc-600">+</span>
-      <span className="pointer-events-none absolute top-2 right-2 text-[10px] font-mono text-zinc-600">+</span>
-      <span className="pointer-events-none absolute bottom-2 left-2 text-[10px] font-mono text-zinc-600">+</span>
-      <span className="pointer-events-none absolute bottom-2 right-2 text-[10px] font-mono text-zinc-600">+</span>
-
-      {/* Top Left Status Badge */}
-      <div className="pointer-events-none absolute top-4 left-4 flex items-center gap-2 border border-white/10 bg-black/60 px-2 py-0.5 font-mono text-[9px] text-zinc-400 backdrop-blur-md uppercase">
-        <span className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />
-        <span>3D CORE // ACTIVE</span>
-      </div>
-
-      {/* Bottom Right Coordinate Stamp */}
-      <div className="pointer-events-none absolute bottom-4 right-4 font-mono text-[9px] text-zinc-500 tracking-wider">
-        [ 45° AZIMUTH // ARCH_SPEC_01 ]
-      </div>
+      {/* Subtle Ambient Radial Lighting */}
+      <div className="absolute inset-0 bg-gradient-to-tr from-white/[0.05] via-zinc-500/[0.02] to-transparent rounded-full blur-3xl pointer-events-none" />
 
       {/* React Three Fiber Canvas */}
       <Canvas

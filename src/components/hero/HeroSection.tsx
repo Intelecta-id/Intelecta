@@ -33,14 +33,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenConsultation }) 
         <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-8">
           {/* Left Column: Narrative Headline & Actions (7 cols) */}
           <div className="text-center lg:col-span-7 lg:text-left flex flex-col items-center lg:items-start">
-            {/* Top Architectural Signal Badge (Harsh Dayal Minimal Style) */}
-            <div className="relative inline-flex items-center gap-2.5 border border-white/20 bg-[#08080b] px-3.5 py-1.5 font-mono text-[11px] tracking-widest text-zinc-300 uppercase">
-              <span className="corner-tl !w-1 !h-1" />
-              <span className="corner-tr !w-1 !h-1" />
-              <span className="corner-bl !w-1 !h-1" />
-              <span className="corner-br !w-1 !h-1" />
-              <span className="h-1.5 w-1.5 rounded-none bg-white animate-pulse" />
-              <ScrambleText text="REKAYASA DIGITAL & ARSITEKTUR ENTERPRISE" speed={28} delay={300} />
+            {/* Top Signal Badge (Linear / Vercel Clean Style) */}
+            <div className="inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.04] px-4 py-1.5 text-xs text-zinc-300 backdrop-blur-md">
+              <span className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />
+              <span className="font-mono text-[11px] tracking-wider uppercase">Rekayasa Digital & Arsitektur Enterprise</span>
             </div>
 
             {/* Grand Headline - Solid White High-Contrast Typography (Zero Gradients) */}
@@ -93,32 +89,20 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenConsultation }) 
               </MagneticButton>
             </div>
 
-            {/* Trust Metrics / Specs Grid (Sharp Boxes with Corner Crosshairs) */}
-            <div className="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-2.5 w-full">
-              <div className="relative flex items-center gap-2 border border-white/10 bg-[#070709] px-3.5 py-2 text-xs font-mono text-zinc-400">
-                <span className="corner-tl !w-1 !h-1" />
-                <span className="corner-tr !w-1 !h-1" />
-                <span className="corner-bl !w-1 !h-1" />
-                <span className="corner-br !w-1 !h-1" />
-                <GlyphShield className="h-3.5 w-3.5 text-white shrink-0" />
+            {/* Trust Metrics / Specs Grid (Clean Premium Cards) */}
+            <div className="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-3 w-full">
+              <div className="flex items-center gap-2.5 rounded-lg border border-white/[0.08] bg-[#0c0d10] px-4 py-2.5 text-xs font-mono text-zinc-300">
+                <GlyphShield className="h-4 w-4 text-white shrink-0" />
                 <span>Zero-Trust Security</span>
               </div>
 
-              <div className="relative flex items-center gap-2 border border-white/10 bg-[#070709] px-3.5 py-2 text-xs font-mono text-zinc-400">
-                <span className="corner-tl !w-1 !h-1" />
-                <span className="corner-tr !w-1 !h-1" />
-                <span className="corner-bl !w-1 !h-1" />
-                <span className="corner-br !w-1 !h-1" />
-                <GlyphCpu className="h-3.5 w-3.5 text-white shrink-0" />
+              <div className="flex items-center gap-2.5 rounded-lg border border-white/[0.08] bg-[#0c0d10] px-4 py-2.5 text-xs font-mono text-zinc-300">
+                <GlyphCpu className="h-4 w-4 text-white shrink-0" />
                 <span>99.99% Cloud SLA</span>
               </div>
 
-              <div className="relative flex items-center gap-2 border border-white/10 bg-[#070709] px-3.5 py-2 text-xs font-mono text-zinc-400">
-                <span className="corner-tl !w-1 !h-1" />
-                <span className="corner-tr !w-1 !h-1" />
-                <span className="corner-bl !w-1 !h-1" />
-                <span className="corner-br !w-1 !h-1" />
-                <GlyphLayers className="h-3.5 w-3.5 text-white shrink-0" />
+              <div className="flex items-center gap-2.5 rounded-lg border border-white/[0.08] bg-[#0c0d10] px-4 py-2.5 text-xs font-mono text-zinc-300">
+                <GlyphLayers className="h-4 w-4 text-white shrink-0" />
                 <span>Distributed Mesh</span>
               </div>
             </div>

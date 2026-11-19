@@ -66,18 +66,12 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
       >
         <nav
           className={cn(
-            "relative flex items-center justify-between gap-4 rounded-none px-4 py-2 sm:px-6 sm:py-2.5 transition-colors border",
+            "relative flex items-center justify-between gap-4 rounded-full px-5 py-2 sm:px-6 sm:py-2.5 transition-all border",
             isScrolled
-              ? "bg-black border-white/25 shadow-2xl"
-              : "bg-black/90 border-white/15 backdrop-blur-md"
+              ? "bg-black/90 border-white/20 shadow-2xl backdrop-blur-xl"
+              : "bg-black/70 border-white/10 backdrop-blur-md"
           )}
         >
-          {/* Corner Crosshairs */}
-          <span className="corner-tl !w-1 !h-1" />
-          <span className="corner-tr !w-1 !h-1" />
-          <span className="corner-bl !w-1 !h-1" />
-          <span className="corner-br !w-1 !h-1" />
-
           {/* Logo Brand */}
           <Link href="/" className="flex items-center gap-2.5 group">
             <div
@@ -106,15 +100,12 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
                   key={link.label}
                   href={link.href}
                   className={cn(
-                    "relative px-3 py-1 font-mono text-[11px] uppercase tracking-wider transition-colors flex items-center gap-1.5 border",
+                    "px-3.5 py-1 text-xs transition-colors flex items-center gap-1.5 rounded-full",
                     isCurrent
-                      ? "bg-white text-black font-bold border-white"
-                      : "text-zinc-400 border-transparent hover:text-white hover:border-white/20"
+                      ? "bg-white text-black font-semibold shadow-sm"
+                      : "text-zinc-400 hover:text-white hover:bg-white/5"
                   )}
                 >
-                  {link.is3D && (
-                    <span className="h-1.5 w-1.5 rounded-none bg-white" />
-                  )}
                   <span>{link.label}</span>
                 </Link>
               );
@@ -128,10 +119,10 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
                 if (onOpenConsultation) {
                   onOpenConsultation();
                 } else {
-                  window.location.href = "/#kontak";
+                  window.location.href = "/#layanan";
                 }
               }}
-              className="hidden sm:inline-flex items-center gap-1.5 bg-white px-4 py-1.5 font-mono text-xs font-bold uppercase tracking-wider text-black border border-white hover:bg-zinc-200 transition-colors"
+              className="hidden sm:inline-flex items-center gap-1.5 bg-white px-4 py-1.5 rounded-full text-xs font-semibold text-black hover:bg-zinc-200 transition-all shadow-[0_0_15px_rgba(255,255,255,0.2)]"
             >
               <span>Konsultasi</span>
               <GlyphArrowUpRight className="h-3.5 w-3.5" />
@@ -141,7 +132,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-label="Buka menu navigasi"
-              className="flex h-8 w-8 items-center justify-center border border-white/20 bg-black text-white hover:border-white md:hidden transition-colors"
+              className="flex h-8 w-8 items-center justify-center rounded-full border border-white/20 bg-black text-white hover:border-white md:hidden transition-colors"
             >
               {mobileMenuOpen ? <GlyphClose className="h-4 w-4" /> : <GlyphMenu className="h-4 w-4" />}
             </button>

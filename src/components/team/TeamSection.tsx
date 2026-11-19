@@ -62,16 +62,12 @@ export const TeamSection: React.FC = () => {
                   key={dept}
                   onClick={() => setSelectedDept(dept)}
                   className={cn(
-                    "relative px-3.5 py-1.5 font-mono text-xs uppercase tracking-wider transition-all duration-150 border",
+                    "px-3.5 py-1.5 font-mono text-xs uppercase tracking-wider transition-all duration-150 rounded-full border",
                     isActive
                       ? "bg-white text-black font-bold border-white shadow-[0_0_15px_rgba(255,255,255,0.25)]"
-                      : "border-white/15 bg-[#08080b] text-zinc-400 hover:border-white/30 hover:text-white"
+                      : "border-white/10 bg-white/[0.03] text-zinc-400 hover:border-white/25 hover:text-white"
                   )}
                 >
-                  <span className={cn("corner-tl !w-1 !h-1", isActive ? "!border-black" : "")} />
-                  <span className={cn("corner-tr !w-1 !h-1", isActive ? "!border-black" : "")} />
-                  <span className={cn("corner-bl !w-1 !h-1", isActive ? "!border-black" : "")} />
-                  <span className={cn("corner-br !w-1 !h-1", isActive ? "!border-black" : "")} />
                   <span>{dept === "All" ? "Semua Divisi" : dept}</span>
                 </button>
               );
@@ -96,23 +92,17 @@ export const TeamSection: React.FC = () => {
               >
                 <Link
                   href={`/tim/${member.slug}`}
-                  className="group relative flex flex-col justify-between h-full border border-white/15 bg-[#08080c] p-7 sm:p-8 transition-all duration-200 hover:border-white/35 hover:bg-[#0c0c12] hover:shadow-[0_0_30px_rgba(255,255,255,0.06)]"
+                  className="group relative flex flex-col justify-between h-full rounded-2xl border border-white/10 bg-[#0c0d10] p-7 sm:p-8 transition-all duration-200 hover:border-white/30 hover:bg-[#101216] hover:shadow-[0_10px_40px_rgba(0,0,0,0.6)]"
                 >
-                  {/* Technical Crosshairs */}
-                  <span className="corner-tl" />
-                  <span className="corner-tr" />
-                  <span className="corner-bl" />
-                  <span className="corner-br" />
-
                   <div>
                     {/* Top Bar: Avatar & Experience */}
                     <div className="flex items-center justify-between">
-                      <div className="flex h-12 w-12 items-center justify-center border border-white/20 bg-[#121218] font-display text-base font-black text-white">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-white/15 bg-[#16181f] font-display text-base font-black text-white">
                         {member.avatarPlaceholder}
                       </div>
 
                       <div className="flex items-center gap-2">
-                        <span className="border border-white/10 bg-white/5 px-2.5 py-1 font-mono text-[11px] text-zinc-400">
+                        <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 font-mono text-[11px] text-zinc-400">
                           {member.yearsOfExp}+ TAHUN PENGALAMAN
                         </span>
                       </div>
@@ -129,7 +119,7 @@ export const TeamSection: React.FC = () => {
                             {member.name}
                           </h3>
                         </div>
-                        <div className="flex h-8 w-8 shrink-0 items-center justify-center border border-white/15 bg-black text-zinc-400 transition-all duration-200 group-hover:bg-white group-hover:text-black group-hover:border-white">
+                        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/15 bg-black text-zinc-400 transition-all duration-200 group-hover:bg-white group-hover:text-black group-hover:border-white">
                           <GlyphArrowUpRight className="h-4 w-4" />
                         </div>
                       </div>
@@ -149,7 +139,7 @@ export const TeamSection: React.FC = () => {
                       {member.skills[0]?.items.slice(0, 4).map((skill) => (
                         <span
                           key={skill}
-                          className="border border-white/10 bg-white/[0.03] px-2 py-0.5 font-mono text-[10px] text-zinc-400"
+                          className="rounded-md border border-white/10 bg-white/[0.03] px-2.5 py-0.5 font-mono text-[10px] text-zinc-400"
                         >
                           {skill}
                         </span>

@@ -7,7 +7,6 @@ import { ServicesMatrix } from "@/components/services/ServicesMatrix";
 import { CurtainSection } from "@/components/transitions/CurtainSection";
 import { FloatingBottomDock } from "@/components/layout/FloatingBottomDock";
 import { CommandMenuModal } from "@/components/ui/CommandMenuModal";
-import { gsap } from "@/lib/gsap-config";
 
 // Code splitting for Below-The-Fold complex components
 const BeforeAfterCompare = dynamic(
@@ -38,27 +37,6 @@ export default function Home() {
   const mainRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    // Continuous Axis Line Tracker animation across main page
-    const ctx = gsap.context(() => {
-      const axisLine = document.querySelector(".global-axis-line");
-      if (axisLine) {
-        gsap.fromTo(
-          axisLine,
-          { scaleY: 0, transformOrigin: "top center" },
-          {
-            scaleY: 1,
-            ease: "none",
-            scrollTrigger: {
-              trigger: mainRef.current,
-              start: "top top",
-              end: "bottom bottom",
-              scrub: true,
-            },
-          }
-        );
-      }
-    }, mainRef);
-
     // Global shortcut Ctrl+K / Cmd+K listener
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
@@ -69,18 +47,12 @@ export default function Home() {
     window.addEventListener("keydown", handleKeyDown);
 
     return () => {
-      ctx.revert();
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, []);
 
   return (
     <main ref={mainRef} className="relative min-h-screen bg-[#000000] text-white selection:bg-white selection:text-black">
-      {/* Global Vertical Axis Tracker Line (Swiss Engineering Guideline) */}
-      <div className="pointer-events-none fixed left-8 sm:left-12 top-0 bottom-0 z-10 w-[1px] bg-white/10 hidden xl:block">
-        <div className="global-axis-line w-full h-full bg-white/40" />
-      </div>
-
       {/* 1. LANDING PAGE & 3D PROCEDURAL CENTERPIECE */}
       <CurtainSection id="beranda-curtain">
         <HeroSection onOpenConsultation={() => setIsConsultationOpen(true)} />
